@@ -5,17 +5,18 @@ definePageMeta({
 </script>
 
 <template>
-  <AdminLogin />
+  <div class="page">
+    <AdminLogin />
+  </div>
 </template>
 
-<style lang="scss">
-body {
+<style lang="scss" scoped>
+.page {
   width: 100vw;
   height: 100vh;
 
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  display: grid;
+  place-items: center;
 
   background-color: #f1f5f9; // bg-slate-100
 }

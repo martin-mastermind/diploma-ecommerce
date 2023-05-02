@@ -6,12 +6,12 @@
 </template>
 
 <style lang="scss">
-  * {
-    box-sizing: border-box;
-    font-family: 'Open Sans', sans-serif;
-  }
+* {
+  box-sizing: border-box;
+  font-family: 'Open Sans', sans-serif;
+}
 
-  .vue-notification {
-    font-size: unset !important;
+.vue-notification {
+  font-size: unset !important;
 }
 </style>
