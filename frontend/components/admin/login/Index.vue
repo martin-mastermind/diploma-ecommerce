@@ -5,11 +5,11 @@ const { data, cannotLogin, login } = useLogin()
 </script>
 
 <template>
-  <main class="bg-slate-300 text-xl flex flex-col justify-center items-center p-5 rounded-xl gap-10 shadow-xl sm:p-10 transition-all">
+  <main class="bg-slate-300 text-xl grid place-items-center p-5 rounded-xl gap-10 shadow-xl sm:p-10 transition-all">
     <h1 class="font-bold">
       Авторизуйтесь для доступа
     </h1>
-    <form class="w-full flex flex-col gap-5">
+    <form class="w-full grid gap-5">
       <AdminLoginFormElement
         v-for="(element, key) in data"
         :id="key"

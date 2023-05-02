@@ -15,7 +15,7 @@ function emitInput () {
 </script>
 
 <template>
-  <section class="flex flex-col gap-1">
+  <section class="grid gap-1">
     <label :for="id">{{ label }}</label>
     <input
       :id="id"
