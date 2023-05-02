@@ -13,7 +13,6 @@ export default defineNuxtConfig({
     '@nuxt/devtools',
     '@nuxtjs/eslint-module',
     '@nuxtjs/tailwindcss',
-    '@vee-validate/nuxt',
     'nuxt-vitest',
     '@pinia/nuxt',
     '@pinia-plugin-persistedstate/nuxt',
@@ -21,7 +20,7 @@ export default defineNuxtConfig({
   ],
   googleFonts: {
     families: {
-      Roboto: true
+      'Open+Sans': true
     },
     display: 'swap'
   },
