@@ -1,0 +1,41 @@
+{
+  "name": "diploma",
+  "private": true,
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare",
+    "test": "vitest"
+  },
+  "devDependencies": {
+    "@nuxt/devtools": "^0.4.2",
+    "@nuxt/test-utils": "^3.4.2",
+    "@nuxtjs/eslint-config-typescript": "^12.0.0",
+    "@nuxtjs/eslint-module": "^4.0.2",
+    "@nuxtjs/google-fonts": "^3.0.0",
+    "@nuxtjs/tailwindcss": "^6.6.7",
+    "@pinia-plugin-persistedstate/nuxt": "^1.1.1",
+    "@pinia/nuxt": "^0.4.9",
+    "@types/node": "^18",
+    "@typescript-eslint/eslint-plugin": "^5.43.0",
+    "@vitejs/plugin-vue": "^4.2.1",
+    "@vitest/coverage-c8": "^0.30.1",
+    "eslint": "^8.39.0",
+    "eslint-config-standard-with-typescript": "^34.0.1",
+    "eslint-plugin-import": "^2.25.2",
+    "eslint-plugin-n": "^15.0.0",
+    "eslint-plugin-promise": "^6.0.0",
+    "eslint-plugin-vue": "^9.11.0",
+    "jsdom": "^21.1.1",
+    "nuxt": "^3.4.2",
+    "nuxt-vitest": "^0.6.10",
+    "sass": "^1.62.1",
+    "typescript": "^5.0.4",
+    "vitest": "^0.30.1"
+  },
+  "dependencies": {
+    "@vee-validate/nuxt": "^4.8.6"
+  }
+}
