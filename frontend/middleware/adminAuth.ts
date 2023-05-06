@@ -1,13 +1,17 @@
 import { useUser } from '~/store/admin/user'
 
 export default defineNuxtRouteMiddleware(async (to) => {
-  const { user } = useUser()
+  const userStore = useUser()
 
-  if (to.name === 'admin-login' && user != null) {
+  if (!userStore.isEmptyUser() && !await userStore.verifyUser()) {
+    return await navigateTo('/admin/login')
+  }
+
+  if (to.name === 'admin-login' && userStore.user != null) {
     return await navigateTo('/admin')
   }
 
-  if (to.name !== 'admin-login' && user == null) {
+  if (to.name !== 'admin-login' && userStore.user == null) {
     return await navigateTo('/admin/login')
   }
 })

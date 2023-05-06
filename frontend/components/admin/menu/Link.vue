@@ -11,4 +11,3 @@ defineProps<{
     <Icon size="22px" :name="icon" /> {{ title }}
   </nuxt-link>
 </template>
-W

@@ -1,5 +1,7 @@
 import { createHash } from 'crypto'
 
+import { generateToken, isValidToken } from '~~/backend/utils/adminToken'
+
 export default defineEventHandler(async (event) => {
   const body = await readBody<{ id?: number, password?: string }>(event)
 
@@ -14,6 +16,13 @@ export default defineEventHandler(async (event) => {
     throw createError({
       statusCode: 400,
       message: 'Не указано поле password'
+    })
+  }
+
+  if (isValidToken(getCookie(event, 'token'))) {
+    throw createError({
+      statusCode: 403,
+      message: 'Пользователь уже авторизован'
     })
   }
 
@@ -37,6 +46,8 @@ export default defineEventHandler(async (event) => {
       message: 'Не найден пользователь с такими данными'
     })
   }
+
+  setCookie(event, 'token', generateToken(user.id))
 
   return {
     id: user.id,

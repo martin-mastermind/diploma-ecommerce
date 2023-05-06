@@ -7,7 +7,8 @@ export function useApi (url: string, props?: object) {
       headers: {
         'Content-Type': 'application/json'
       },
-      body: props
+      body: props,
+      credentials: 'include'
     })
 
     if (error.value != null) {
@@ -22,5 +23,27 @@ export function useApi (url: string, props?: object) {
     return data.value as object
   }
 
-  return { post }
+  async function get (): Promise<false | object> {
+    const { data, error } = await useFetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      query: props,
+      credentials: 'include'
+    })
+
+    if (error.value != null) {
+      notify({
+        type: 'error',
+        title: 'Ошибка',
+        text: `${error.value?.data.message as string}`
+      })
+      return false
+    }
+
+    return data.value as object
+  }
+
+  return { get, post }
 }
