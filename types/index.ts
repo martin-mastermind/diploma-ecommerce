@@ -8,4 +8,9 @@ declare global {
     patronymic: string | null
     type: string
   }
+
+  enum AdminUserAPI {
+    LOGIN = '/api/admin/login',
+    LOGOUT = '/api/admin/logout'
+  }
 }

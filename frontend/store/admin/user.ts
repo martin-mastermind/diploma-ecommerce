@@ -1,33 +1,29 @@
 import { defineStore } from 'pinia'
 
-import { notify } from '@kyvg/vue3-notification'
+import { useApi } from '~/composables/utils/useApi'
 
 export const useUser = defineStore('userStore', () => {
   const user = ref<AdminUser | null>(null)
 
   async function loginUser (id: number, password: string) {
-    const { data, error } = await useFetch('/api/admin/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: { id, password }
-    })
+    const result = await useApi(AdminUserAPI.LOGIN, { id, password }).post()
 
-    if (error.value != null) {
-      notify({
-        type: 'error',
-        title: 'Авторизация',
-        text: `Произошла ошибка, повторите попытку <br><br> ${error.value?.data.message as string}`
-      })
-      return false
-    }
+    if (result === false) { return false }
 
-    user.value = data.value
+    user.value = result as AdminUser
     return true
   }
 
-  return { user, loginUser }
+  async function logoutUser () {
+    const result = await useApi(AdminUserAPI.LOGOUT).post()
+
+    if (result === false) { return false }
+
+    user.value = null
+    return true
+  }
+
+  return { user, loginUser, logoutUser }
 }, {
   persist: true
 })

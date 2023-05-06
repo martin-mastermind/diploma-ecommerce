@@ -30,6 +30,7 @@
     "eslint-plugin-vue": "^9.11.0",
     "jsdom": "^21.1.1",
     "nuxt": "^3.4.2",
+    "nuxt-icon": "^0.4.0",
     "nuxt-vitest": "^0.6.10",
     "sass": "^1.62.1",
     "typescript": "^5.0.4"

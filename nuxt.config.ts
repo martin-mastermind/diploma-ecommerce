@@ -13,10 +13,10 @@ export default defineNuxtConfig({
     '@nuxt/devtools',
     '@nuxtjs/eslint-module',
     '@nuxtjs/tailwindcss',
-    'nuxt-vitest',
     '@pinia/nuxt',
     '@pinia-plugin-persistedstate/nuxt',
-    '@nuxtjs/google-fonts'
+    '@nuxtjs/google-fonts',
+    'nuxt-icon'
   ],
   googleFonts: {
     families: {
