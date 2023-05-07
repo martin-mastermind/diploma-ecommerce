@@ -10,7 +10,7 @@ const { data, cannotLogin, login } = useLogin()
       Авторизуйтесь для доступа
     </h1>
     <form class="w-full grid gap-5">
-      <AdminLoginFormElement
+      <AdminUiInput
         v-for="(element, key) in data"
         :id="key"
         :key="key"

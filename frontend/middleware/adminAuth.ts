@@ -16,4 +16,11 @@ export default defineNuxtRouteMiddleware(async (to) => {
   if (!isNeedAuth && userStore.user !== null) {
     return await navigateTo('/admin')
   }
+
+  const needRole = to.meta.role as string ?? ''
+  const currentRole = userStore.user?.type
+
+  if (currentRole !== 'full' && needRole !== currentRole) {
+    return await navigateTo('/admin')
+  }
 })

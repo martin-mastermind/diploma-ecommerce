@@ -1,6 +1,22 @@
 import { notify } from '@kyvg/vue3-notification'
 
 export function useApi (url: string, props?: object) {
+  const apiError = ref(undefined as any | undefined)
+
+  watch(apiError, async () => {
+    if (apiError.value === undefined) { return }
+
+    notify({
+      type: 'error',
+      title: 'Ошибка',
+      text: `${apiError.value?.data.message as string}`
+    })
+
+    if (apiError.value?.statusCode === 403) {
+      await navigateTo('/admin/login')
+    }
+  })
+
   async function post (): Promise<false | object> {
     const { data, error } = await useFetch(url, {
       method: 'POST',
@@ -11,16 +27,8 @@ export function useApi (url: string, props?: object) {
       credentials: 'include'
     })
 
-    if (error.value != null) {
-      notify({
-        type: 'error',
-        title: 'Ошибка',
-        text: `${error.value?.data.message as string}`
-      })
-      return false
-    }
-
-    return data.value as object
+    apiError.value = error.value
+    return data.value as object | null ?? false
   }
 
   async function get (): Promise<false | object> {
@@ -33,16 +41,8 @@ export function useApi (url: string, props?: object) {
       credentials: 'include'
     })
 
-    if (error.value != null) {
-      notify({
-        type: 'error',
-        title: 'Ошибка',
-        text: `${error.value?.data.message as string}`
-      })
-      return false
-    }
-
-    return data.value as object
+    apiError.value = error.value
+    return data.value as object | null ?? false
   }
 
   return { get, post }

@@ -8,4 +8,10 @@ declare global {
     patronymic: string | null
     type: string
   }
+
+  interface GoodPreview {
+    id: number
+    title: string
+    vendor_code: string
+  }
 }

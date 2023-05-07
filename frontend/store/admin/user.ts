@@ -6,7 +6,7 @@ export const useUser = defineStore('userStore', () => {
   const user = ref<AdminUser | null>(null)
 
   async function loginUser (id: number, password: string) {
-    const result = await useApi('/api/admin/login', { id, password }).post()
+    const result = await useApi('/api/admin/auth/login', { id, password }).post()
 
     if (result === false) { return false }
 
@@ -15,7 +15,7 @@ export const useUser = defineStore('userStore', () => {
   }
 
   async function logoutUser () {
-    const result = await useApi('/api/admin/logout').post()
+    const result = await useApi('/api/admin/auth/logout').post()
 
     if (result === false) { return false }
 
@@ -28,7 +28,7 @@ export const useUser = defineStore('userStore', () => {
   }
 
   async function verifyUser () {
-    const result = await useApi('/api/admin/verify', { id: user.value?.id }).get()
+    const result = await useApi('/api/admin/auth/verify', { id: user.value?.id }).get()
 
     if (result === false) { return false }
 
