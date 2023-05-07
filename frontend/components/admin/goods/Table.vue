@@ -4,7 +4,6 @@ import { useGoods } from '~/store/admin/goods'
 const emit = defineEmits(['openModal'])
 
 const goodsStore = useGoods()
-onServerPrefetch(goodsStore.getGoods)
 </script>
 
 <template>

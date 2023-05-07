@@ -1,12 +1,26 @@
 <script setup lang="ts">
-defineProps<{
+import { useGoods } from '~/store/admin/goods'
+
+const props = defineProps<{
     isOpened: boolean
     id: number
 }>()
 
-const emit = defineEmits(['update:isOpened'])
+const emit = defineEmits(['update:isOpened', 'refetchList'])
+const goodsStore = useGoods()
 
 const title = ref('')
+
+function askDelete () {
+  if (!props.id) { return }
+
+  if (!confirm('Вы уверены?')) { return }
+
+  if (!goodsStore.deleteGood(props.id)) { return }
+
+  emit('refetchList')
+  emit('update:isOpened', false)
+}
 </script>
 
 <template>
@@ -15,7 +29,7 @@ const title = ref('')
       <header class="flex justify-between items-center text-3xl">
         <div class="flex gap-2 items-center">
           <h2>Редактирование товара</h2>
-          <Icon class="cursor-pointer hover:text-red-600 active:text-red-700 transition-colors" name="material-symbols:delete-outline-rounded" />
+          <Icon v-if="id" class="cursor-pointer hover:text-red-600 active:text-red-700 transition-colors" name="material-symbols:delete-outline-rounded" @click="askDelete" />
         </div>
         <AdminUiControlButton name="material-symbols:close-rounded" @click="emit('update:isOpened', false)" />
       </header>

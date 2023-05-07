@@ -14,4 +14,15 @@ declare global {
     title: string
     vendor_code: string
   }
+
+  interface Good extends GoodPreview {
+    img: string
+    category_id: number
+    origin_country: string
+    description: string
+    characteristic: string
+    weight: string
+    price: number
+    amount: number
+  }
 }

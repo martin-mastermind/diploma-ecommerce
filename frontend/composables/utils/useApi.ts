@@ -4,7 +4,7 @@ export function useApi (url: string, props?: object) {
   const apiError = ref(undefined as any | undefined)
 
   watch(apiError, async () => {
-    if (apiError.value === undefined) { return }
+    if (apiError.value === undefined || apiError.value === null) { return }
 
     notify({
       type: 'error',
@@ -45,5 +45,19 @@ export function useApi (url: string, props?: object) {
     return data.value as object | null ?? false
   }
 
-  return { get, post }
+  async function remove (): Promise<false | object> {
+    const { data, error } = await useFetch(url, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: props,
+      credentials: 'include'
+    })
+
+    apiError.value = error.value
+    return data.value as object | null ?? false
+  }
+
+  return { get, post, remove }
 }

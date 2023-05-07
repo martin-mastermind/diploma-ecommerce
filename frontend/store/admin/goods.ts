@@ -14,5 +14,13 @@ export const useGoods = defineStore('goodsStore', () => {
     return true
   }
 
-  return { goods, getGoods }
+  async function deleteGood (id: number) {
+    const result = await useApi(`/api/admin/goods/${id}`).remove()
+
+    if (result === false) { return false }
+
+    return true
+  }
+
+  return { goods, getGoods, deleteGood }
 })
