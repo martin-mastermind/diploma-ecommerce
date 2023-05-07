@@ -23,7 +23,7 @@ const { goods } = useGoods()
       </tr>
     </thead>
     <tbody v-if="goods.length > 0">
-      <tr v-for="good in goods" :key="good.id" class="border-b border-slate-500 hover:bg-slate-200 transition-colors">
+      <tr v-for="good in goods" :key="good.id" class="border-b border-slate-500 hover:bg-slate-200 transition-colors select-none">
         <td class="p-2">
           {{ good.id }}
         </td>
