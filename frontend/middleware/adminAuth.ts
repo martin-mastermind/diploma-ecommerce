@@ -7,11 +7,13 @@ export default defineNuxtRouteMiddleware(async (to) => {
     return await navigateTo('/admin/login')
   }
 
-  if (to.name === 'admin-login' && userStore.user != null) {
-    return await navigateTo('/admin')
+  const isNeedAuth = Boolean(to.meta.auth)
+
+  if (isNeedAuth && userStore.user === null) {
+    return await navigateTo('/admin/login')
   }
 
-  if (to.name !== 'admin-login' && userStore.user == null) {
-    return await navigateTo('/admin/login')
+  if (!isNeedAuth && userStore.user !== null) {
+    return await navigateTo('/admin')
   }
 })
