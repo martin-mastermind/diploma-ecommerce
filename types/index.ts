@@ -17,12 +17,17 @@ declare global {
 
   interface Good extends GoodPreview {
     img: string
-    category_id: number
+    category_id: number | null
     origin_country: string
     description: string
     characteristic: string
     weight: string
     price: number
     amount: number
+  }
+
+  interface CategoryPreview {
+    id: number
+    title: string
   }
 }

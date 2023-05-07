@@ -40,7 +40,7 @@ export function useLogin () {
     pending.value = false
 
     if (!result) { return }
-    await useRouter().push('/admin')
+    await navigateTo('/admin')
   }
 
   return { data, validator, cannotLogin, login }

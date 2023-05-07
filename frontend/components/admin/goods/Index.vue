@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { useGoods } from '~/store/admin/goods'
 
-const goodsStore = useGoods()
-onServerPrefetch(goodsStore.getGoods)
+const { getGoods } = useGoods()
+onServerPrefetch(getGoods)
 
 const modalState = ref({
   isOpen: false,
@@ -18,13 +18,11 @@ function openModal (id: number) {
 <template>
   <main class="p-5 w-full">
     <header class="flex gap-2 items-center text-3xl">
-      <h1>
-        Список товаров
-      </h1>
-      <AdminUiControlButton name="material-symbols:add-rounded" />
+      <h1>Список товаров</h1>
+      <AdminUiControlButton name="material-symbols:add-rounded" @click="openModal(0)" />
     </header>
     <AdminGoodsTable @open-modal="openModal" />
-    <LazyAdminGoodsModal :id="modalState.id" v-model:is-opened="modalState.isOpen" @refetch-list="goodsStore.getGoods" />
+    <LazyAdminGoodsModal :id="modalState.id" v-model:is-opened="modalState.isOpen" @refetch-list="getGoods" />
   </main>
 </template>
 

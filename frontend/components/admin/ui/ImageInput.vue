@@ -1,21 +1,18 @@
 <script setup lang="ts">
 const props = defineProps<{
-  id: string,
-  label: string,
+  id: string
+  label: string
   modelValue: string
 }>()
 const emit = defineEmits(['update:modelValue'])
 
 const input = ref(null as HTMLInputElement | null)
 
-const previewUrl = ref(props.modelValue || '/img/goods_placeholder.png')
+const previewUrl = ref('/img/goods_placeholder.png')
+watchEffect(() => { previewUrl.value = props.modelValue })
 
 function emitInput () {
   emit('update:modelValue', input.value!.value)
-}
-
-function setPreviewUrl () {
-  previewUrl.value = input.value!.value
 }
 
 function setPlaceholder () {
@@ -34,8 +31,7 @@ function setPlaceholder () {
         :value="modelValue"
         class="bg-slate-100 p-2 text-slate-500 border-2 border-slate-500 rounded-md outline-none"
         type="text"
-        @input="emitInput"
-        @blur="setPreviewUrl"
+        @blur="emitInput"
       >
     </div>
   </section>

@@ -3,7 +3,7 @@ import { useGoods } from '~/store/admin/goods'
 
 const emit = defineEmits(['openModal'])
 
-const goodsStore = useGoods()
+const { goods } = useGoods()
 </script>
 
 <template>
@@ -22,8 +22,8 @@ const goodsStore = useGoods()
         <th class="p-2 w-1/4" />
       </tr>
     </thead>
-    <tbody v-if="goodsStore.goods.length > 0">
-      <tr v-for="good in goodsStore.goods" :key="good.id" class="border-b border-slate-500 hover:bg-slate-200 transition-colors">
+    <tbody v-if="goods.length > 0">
+      <tr v-for="good in goods" :key="good.id" class="border-b border-slate-500 hover:bg-slate-200 transition-colors">
         <td class="p-2">
           {{ good.id }}
         </td>

@@ -2,27 +2,30 @@
 defineProps<{
   id: string
   label: string
-  modelValue: string
+  modelValue: string | number
 }>()
 const emit = defineEmits(['update:modelValue'])
 
-const input = ref(null as HTMLTextAreaElement | null)
+const input = ref(null as HTMLInputElement | null)
 
 function emitInput () {
-  emit('update:modelValue', input.value!.innerText)
+  emit('update:modelValue', input.value!.value)
 }
 </script>
 
 <template>
   <section class="grid gap-1">
     <label :for="id">{{ label }}</label>
-    <textarea
+    <input
       :id="id"
       ref="input"
       :value="modelValue"
       class="bg-slate-100 p-2 text-slate-500 border-2 border-slate-500 rounded-md outline-none"
-      rows="10"
+      type="number"
+      min="0.00"
+      max="10000.00"
+      step="0.01"
       @input="emitInput"
-    />
+    >
   </section>
 </template>

@@ -45,6 +45,20 @@ export function useApi (url: string, props?: object) {
     return data.value as object | null ?? false
   }
 
+  async function put (): Promise<false | object> {
+    const { data, error } = await useFetch(url, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: props,
+      credentials: 'include'
+    })
+
+    apiError.value = error.value
+    return data.value as object | null ?? false
+  }
+
   async function remove (): Promise<false | object> {
     const { data, error } = await useFetch(url, {
       method: 'DELETE',
@@ -59,5 +73,5 @@ export function useApi (url: string, props?: object) {
     return data.value as object | null ?? false
   }
 
-  return { get, post, remove }
+  return { get, post, put, remove }
 }

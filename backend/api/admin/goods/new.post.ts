@@ -1,6 +1,6 @@
 import { generateToken, isValidToken, getInfoFromToken } from '~~/backend/utils/adminToken'
 
-export default defineEventHandler((event) => {
+export default defineEventHandler(async (event) => {
   const token = getCookie(event, 'token')
   if (!isValidToken(token)) {
     throw createError({
@@ -11,6 +11,8 @@ export default defineEventHandler((event) => {
   setCookie(event, 'token', generateToken(getInfoFromToken(token!)!.id))
 
   const id = event.context.params?.id
+  const body = await readBody<Good>(event)
+
   if (id === undefined) {
     throw createError({
       statusCode: 400,
@@ -18,7 +20,17 @@ export default defineEventHandler((event) => {
     })
   }
 
-  // Удалить запись по ID в БД
+  const props = ['id', 'title', 'vendor_code', 'img', 'origin_country', 'description', 'characteristic', 'weight', 'price', 'amount'] as Array<keyof Good>
+  for (const prop of props) {
+    if (body[prop] == null) {
+      throw createError({
+        statusCode: 400,
+        message: `Не указано поле ${prop}`
+      })
+    }
+  }
+
+  // Добавить запись в БД
 
   return true
 })
