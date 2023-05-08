@@ -1,8 +1,4 @@
 export default defineNuxtConfig({
-  devtools: {
-    enabled: true,
-    vscode: {}
-  },
   typescript: {
     strict: true
   },
@@ -10,7 +6,6 @@ export default defineNuxtConfig({
     exposeConfig: true
   },
   modules: [
-    '@nuxt/devtools',
     '@nuxtjs/eslint-module',
     '@nuxtjs/tailwindcss',
     '@pinia/nuxt',

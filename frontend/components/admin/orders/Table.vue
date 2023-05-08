@@ -7,7 +7,7 @@ const ordersStore = useOrders()
 </script>
 
 <template>
-  <table class="mt-10 text-xl w-full border-collapse border border-slate-500">
+  <table class="mt-10 text-xl overflow-auto w-full border-collapse border border-slate-500">
     <thead class="bg-slate-500 text-white text-left">
       <tr>
         <th class="p-2">

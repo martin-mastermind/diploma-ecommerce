@@ -35,7 +35,7 @@ function removeRule (id: number) {
 </script>
 
 <template>
-  <section class="overflow-auto flex flex-col gap-5">
+  <section class="max-h-96 overflow-auto flex flex-col gap-5">
     <header class="flex gap-2 items-center text-xl">
       <h2>Правила акции</h2>
       <AdminUiControlButton name="material-symbols:add-rounded" @click="addRule" />

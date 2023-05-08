@@ -5,7 +5,7 @@ defineProps<{
 </script>
 
 <template>
-  <table class="text-xl w-full border-collapse border border-slate-500">
+  <table class="text-xl w-full max-h-96 overflow-auto border-collapse border border-slate-500">
     <thead class="bg-slate-500 text-white text-left">
       <tr>
         <th class="p-2">
