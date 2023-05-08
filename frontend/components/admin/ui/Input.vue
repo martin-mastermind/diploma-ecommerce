@@ -4,6 +4,7 @@ defineProps<{
   label: string
   type: string
   modelValue: string | number
+  disabled?: boolean
 }>()
 const emit = defineEmits(['update:modelValue'])
 
@@ -23,6 +24,7 @@ function emitInput () {
       :value="modelValue"
       class="bg-slate-100 p-2 text-slate-500 border-2 border-slate-500 rounded-md outline-none"
       :type="type"
+      :disabled="disabled"
       @input="emitInput"
     >
   </section>

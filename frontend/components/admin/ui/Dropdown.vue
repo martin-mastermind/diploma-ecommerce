@@ -4,6 +4,7 @@ defineProps<{
   label: string
   modelValue: number | string | null
   options: {key: any, name: string, value: any}[]
+  disabled?: boolean
 }>()
 const emit = defineEmits(['update:modelValue'])
 
@@ -22,7 +23,7 @@ function emitInput () {
       ref="input"
       :value="modelValue"
       class="bg-slate-100 p-2 text-slate-500 border-2 border-slate-500 rounded-md outline-none"
-      :disabled="options.length === 0"
+      :disabled="disabled || options.length === 0"
       @input="emitInput"
     >
       <option v-for="option in options" :key="option.key" :value="option.value">
