@@ -135,4 +135,20 @@ declare global {
     status: 'new' | 'in-work' | 'success' | 'canceled'
     goods: OrderGood[]
   }
+
+  interface AppealPreview {
+    id: number
+    user: OrderUser
+  }
+
+  interface AppealMessage {
+    from_admin: boolean
+    sent_time: string
+    message: string
+  }
+
+  interface Appeal extends AppealPreview {
+    messages: AppealMessage[]
+    status: 'new' | 'in-work' | 'closed'
+  }
 }
