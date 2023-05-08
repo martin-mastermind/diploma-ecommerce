@@ -10,20 +10,15 @@ export default defineEventHandler((event) => {
   }
   setCookie(event, 'token', generateToken(getInfoFromToken(token!)!.id))
 
-  const mockCategories = [
-    {
-      id: 1,
-      title: 'Фрукты'
-    },
-    {
-      id: 2,
-      title: 'Молочные продукты'
-    },
-    {
-      id: 3,
-      title: 'Йогурты'
-    }
-  ]
+  const id = event.context.params?.id
+  if (id === undefined) {
+    throw createError({
+      statusCode: 400,
+      message: 'Не указан id категории'
+    })
+  }
 
-  return mockCategories
+  // Удалить запись по ID в БД
+
+  return true
 })

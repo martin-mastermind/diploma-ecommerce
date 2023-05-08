@@ -50,12 +50,12 @@ async function saveChanges () {
 
 <template>
   <div v-if="isOpened" class="flex justify-center items-center fixed w-screen bg-black bg-opacity-50 inset-0">
-    <section class="w-[90%] h-[90%] bg-slate-100 rounded-sm p-5 overflow-auto">
+    <section class="w-[90%] h-[90%] bg-slate-100 rounded-sm p-5 overflow-auto flex flex-col gap-5">
       <header class="flex justify-between items-center text-3xl">
         <h2>Редактирование товара</h2>
         <AdminUiControlButton name="material-symbols:close-rounded" @click="emit('update:isOpened', false)" />
       </header>
-      <article class="mt-5 flex flex-col gap-5">
+      <article class="flex flex-col gap-5">
         <AdminUiImageInput
           id="img"
           v-model="data.img"
@@ -117,7 +117,7 @@ async function saveChanges () {
           />
         </div>
       </article>
-      <footer class="mt-5 flex w-full justify-end gap-5">
+      <footer class="mt-auto flex w-full justify-end gap-5">
         <button v-if="id" class="bg-red-500 text-white px-5 py-3 rounded-md transition-colors disabled:bg-slate-400 hover:bg-red-600 active:bg-red-700" @click="askDelete">
           Удалить
         </button>

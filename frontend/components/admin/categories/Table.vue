@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { useGoods } from '~/store/admin/goods'
+import { useCategories } from '~/store/admin/categories'
 
 const emit = defineEmits(['openModal'])
 
-const goodsStore = useGoods()
+const categoriesStore = useCategories()
 </script>
 
 <template>
@@ -14,27 +14,21 @@ const goodsStore = useGoods()
           ID
         </th>
         <th class="p-2">
-          Артикул
-        </th>
-        <th class="p-2">
           Наименование
         </th>
         <th class="p-2 w-1/4" />
       </tr>
     </thead>
-    <tbody v-if="goodsStore.goods.length > 0">
-      <tr v-for="good in goodsStore.goods" :key="good.id" class="border-b border-slate-500 hover:bg-slate-200 transition-colors select-none">
+    <tbody v-if="categoriesStore.categories.length > 0">
+      <tr v-for="category in categoriesStore.categories" :key="category.id" class="border-b border-slate-500 hover:bg-slate-200 transition-colors select-none">
         <td class="p-2">
-          {{ good.id }}
+          {{ category.id }}
         </td>
         <td class="p-2">
-          {{ good.vendor_code }}
-        </td>
-        <td class="p-2">
-          {{ good.title }}
+          {{ category.title }}
         </td>
         <td class="text-center">
-          <button class="cursor-pointer hover:bg-slate-300 rounded-lg active:bg-slate-400 p-2 transition-colors" @click="emit('openModal', good.id)">
+          <button class="cursor-pointer hover:bg-slate-300 rounded-lg active:bg-slate-400 p-2 transition-colors" @click="emit('openModal', category.id)">
             Показать подробности
           </button>
         </td>

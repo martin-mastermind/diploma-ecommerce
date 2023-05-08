@@ -30,4 +30,8 @@ declare global {
     id: number
     title: string
   }
+
+  interface Category extends CategoryPreview {
+    parent_category_id: number | null
+  }
 }
