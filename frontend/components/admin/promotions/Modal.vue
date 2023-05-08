@@ -5,8 +5,8 @@ import { useCategories } from '~/store/admin/categories'
 import { usePromotion } from '~/composables/admin/usePromotion'
 
 const props = defineProps<{
-    isOpened: boolean
-    id: number
+  isOpened: boolean
+  id: number
 }>()
 
 const emit = defineEmits(['update:isOpened', 'refetchList'])

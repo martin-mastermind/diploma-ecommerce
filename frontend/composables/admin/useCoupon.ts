@@ -1,23 +1,22 @@
 import { useVuelidate } from '@vuelidate/core'
-import { required, numeric, url, maxLength, minValue, maxValue } from '@vuelidate/validators'
-import { usePromotions } from '~/store/admin/promotions'
+import { required, numeric, maxLength, minValue, maxValue } from '@vuelidate/validators'
+import { useCoupons } from '~/store/admin/coupons'
 
-export function usePromotion () {
-  const promotionsStore = usePromotions()
+export function useCoupon () {
+  const couponsStore = useCoupons()
 
-  const data = ref<Promotion>({
+  const data = ref<Coupon>({
     id: 0,
-    img: '',
     title: '',
     total_discount: 0,
-    status: 'new',
-    message: '',
+    code: '',
+    use_amount: 0,
     rules: []
   })
 
-  watch(() => promotionsStore.currentPromotion, () => {
-    if (promotionsStore.currentPromotion == null) { return }
-    data.value = promotionsStore.currentPromotion
+  watch(() => couponsStore.currentCoupon, () => {
+    if (couponsStore.currentCoupon == null) { return }
+    data.value = couponsStore.currentCoupon
   })
 
   const pending = ref(false)
@@ -29,9 +28,10 @@ export function usePromotion () {
   const notEmptyCategory = (value: Rule[]) => value.every(v => +v.category_id > 0)
 
   const rules = {
-    img: { url },
     title: { required, maxLength: maxLength(50) },
     total_discount: { numeric, minValue: minValue(0), maxValue: maxValue(100) },
+    use_amount: { required, minValue: minValue(0) },
+    code: { required, maxLength: maxLength(64) },
     rules: { withoutDuplicates, notEmptyCategory }
   }
   const validator = useVuelidate(rules, data)
@@ -48,7 +48,7 @@ export function usePromotion () {
     }
 
     pending.value = true
-    const result = id === 0 ? await promotionsStore.addPromotion(sendData) : await promotionsStore.updatePromotion(sendData)
+    const result = id === 0 ? await couponsStore.addCoupon(sendData) : await couponsStore.updateCoupon(sendData)
     pending.value = false
 
     return result
@@ -57,11 +57,10 @@ export function usePromotion () {
   function clear () {
     data.value = {
       id: 0,
-      img: '',
       title: '',
       total_discount: 0,
-      status: 'new',
-      message: '',
+      code: '',
+      use_amount: 0,
       rules: []
     }
   }

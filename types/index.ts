@@ -35,15 +35,15 @@ declare global {
     parent_category_id: number | null
   }
 
-  interface PromotionPreview {
-    id: number
-    title: string
-  }
-
-  interface PromotionRule {
+  interface Rule {
     id: number
     category_id: number
     discount: number
+  }
+
+  interface PromotionPreview {
+    id: number
+    title: string
   }
 
   interface Promotion extends PromotionPreview {
@@ -51,7 +51,7 @@ declare global {
     img: string
     total_discount: number
     status: 'new' | 'active' | 'finished' | null
-    rules: PromotionRule[]
+    rules: Rule[]
   }
 
   interface CouponPreview {
@@ -59,16 +59,10 @@ declare global {
     title: string
   }
 
-  interface CouponRule {
-    id: number
-    category_id: number
-    discount: number
-  }
-
   interface Coupon extends CouponPreview {
     code: string
     total_discount: number
     use_amount: number
-    rules: CouponRule[]
+    rules: Rule[]
   }
 }

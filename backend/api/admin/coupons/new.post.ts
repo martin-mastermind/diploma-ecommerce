@@ -10,9 +10,9 @@ export default defineEventHandler(async (event) => {
   }
   setCookie(event, 'token', generateToken(getInfoFromToken(token!)!.id))
 
-  const body = await readBody<Promotion>(event)
+  const body = await readBody<Coupon>(event)
 
-  const props = ['title', 'img', 'message', 'total_discount'] as Array<keyof Promotion>
+  const props = ['title', 'code', 'use_amount', 'total_discount'] as Array<keyof Coupon>
   for (const prop of props) {
     if (body[prop] == null) {
       throw createError({

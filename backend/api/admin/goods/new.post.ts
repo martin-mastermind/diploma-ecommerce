@@ -10,17 +10,9 @@ export default defineEventHandler(async (event) => {
   }
   setCookie(event, 'token', generateToken(getInfoFromToken(token!)!.id))
 
-  const id = event.context.params?.id
   const body = await readBody<Good>(event)
 
-  if (id === undefined) {
-    throw createError({
-      statusCode: 400,
-      message: 'Не указан id товара'
-    })
-  }
-
-  const props = ['id', 'title', 'vendor_code', 'img', 'origin_country', 'description', 'characteristic', 'weight', 'price', 'amount'] as Array<keyof Good>
+  const props = ['title', 'vendor_code', 'img', 'origin_country', 'description', 'characteristic', 'weight', 'price', 'amount'] as Array<keyof Good>
   for (const prop of props) {
     if (body[prop] == null) {
       throw createError({

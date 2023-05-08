@@ -10,9 +10,17 @@ export default defineEventHandler(async (event) => {
   }
   setCookie(event, 'token', generateToken(getInfoFromToken(token!)!.id))
 
-  const body = await readBody<Promotion>(event)
+  const id = event.context.params?.id
+  const body = await readBody<Coupon>(event)
 
-  const props = ['title', 'img', 'message', 'total_discount'] as Array<keyof Promotion>
+  if (id === undefined) {
+    throw createError({
+      statusCode: 400,
+      message: 'Не указан id купона'
+    })
+  }
+
+  const props = ['id', 'title', 'code', 'use_amount', 'total_discount'] as Array<keyof Coupon>
   for (const prop of props) {
     if (body[prop] == null) {
       throw createError({
@@ -22,7 +30,7 @@ export default defineEventHandler(async (event) => {
     }
   }
 
-  // Добавить запись в БД
+  // Обновить запись по ID в БД
 
   return true
 })

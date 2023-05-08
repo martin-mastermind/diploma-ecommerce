@@ -5,8 +5,8 @@ import { useGoods } from '~/store/admin/goods'
 import { useGood } from '~/composables/admin/useGood'
 
 const props = defineProps<{
-    isOpened: boolean
-    id: number
+  isOpened: boolean
+  id: number
 }>()
 
 const emit = defineEmits(['update:isOpened', 'refetchList'])
