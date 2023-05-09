@@ -5,10 +5,7 @@ export default defineEventHandler((event) => {
   const token = getCookie(event, 'token')
 
   if (!isValidToken(token)) {
-    throw createError({
-      statusCode: 403,
-      message: 'Пользователь не авторизован'
-    })
+    return false
   }
 
   const mockUsers = [
@@ -27,20 +24,14 @@ export default defineEventHandler((event) => {
 
   if (!isNaN(parseInt(queryUserId)) && tokenUserId !== +queryUserId) {
     deleteCookie(event, 'token')
-    throw createError({
-      statusCode: 403,
-      message: 'Обнаружена подделка пользователя'
-    })
+    return false
   }
 
   const user = mockUsers.find(u => u.id === tokenUserId)
 
   if (user == null) {
     deleteCookie(event, 'token')
-    throw createError({
-      statusCode: 400,
-      message: 'Не найден пользователь с такими данными'
-    })
+    return false
   }
 
   setCookie(event, 'token', generateToken(user.id))

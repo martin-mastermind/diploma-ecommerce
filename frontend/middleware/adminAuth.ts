@@ -2,23 +2,19 @@ import { useUser } from '~/store/admin/user'
 
 export default defineNuxtRouteMiddleware(async (to) => {
   const userStore = useUser()
-
-  if (!userStore.isEmptyUser() && !await userStore.verifyUser()) {
-    return await navigateTo('/admin/login')
-  }
-
   const isNeedAuth = Boolean(to.meta.auth)
+  const isUserVerified = await userStore.verifyUser()
 
-  if (isNeedAuth && userStore.user === null) {
-    return await navigateTo('/admin/login')
-  }
-
-  if (!isNeedAuth && userStore.user !== null) {
+  if (!isNeedAuth && isUserVerified) {
     return await navigateTo('/admin')
   }
 
+  if (isNeedAuth && !isUserVerified) {
+    return await navigateTo('/admin/login')
+  }
+
   const needRole = to.meta.role as string ?? ''
-  const currentRole = userStore.user?.type
+  const currentRole = userStore.user?.type ?? ''
 
   if (currentRole !== 'full' && needRole !== currentRole) {
     return await navigateTo('/admin')
