@@ -3,7 +3,7 @@
 
 <template>
   <article class="p-2 flex flex-col gap-1">
-    <h1 class="text-xl font-bold">
+    <h1 class="text-xl lg:text-2xl font-bold">
       Акции
     </h1>
     <ClientBasePromotionsCarousel />

@@ -3,7 +3,7 @@
 </script>
 
 <template>
-  <div class="grid-area w-screen min-h-screen grid relative">
+  <div class="grid-area min-h-screen grid relative">
     <ClientHeader />
     <ClientBasePromotions />
     <ClientBaseCatalog />

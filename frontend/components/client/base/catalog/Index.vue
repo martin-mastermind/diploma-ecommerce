@@ -23,20 +23,20 @@ const goods = computed(() => [
 
 <template>
   <article class="p-2">
-    <h1 class="text-xl font-bold">
+    <h1 class="text-xl lg:text-2xl font-bold">
       Может Вас заинтересовать
     </h1>
-    <section class="grid grid-cols-2 gap-3">
+    <section class="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-4">
       <div v-for="good in goods" :key="good.id" class="flex flex-col gap-1">
         <img class="w-full aspect-square object-contain" :src="good.img" alt="" onerror="this.src = '/img/goods_placeholder.png'">
         <span class="text-blue-900 text-md font-bold">{{ good.price }} р.</span>
         <span class="text-lg">{{ good.title }}</span>
         <div class="flex gap-3 items-center">
-          <div class="px-3 py-0.5 rounded-lg text-white bg-blue-900">
-            <Icon name="material-symbols:shopping-cart-outline-rounded" size="1.5rem" />
+          <div class="px-3 py-0.5 lg:px-4 lg:py-1 rounded-lg text-white bg-blue-900">
+            <Icon name="material-symbols:shopping-cart-outline-rounded" size="1.5rem" class="lg:w-7 lg:h-7" />
           </div>
-          <Icon name="material-symbols:favorite-outline-rounded" size="1.5rem" />
-          <Icon name="material-symbols:candlestick-chart-outline-rounded" size="1.5rem" />
+          <Icon name="material-symbols:favorite-outline-rounded" size="1.5rem" class="lg:w-7 lg:h-7" />
+          <Icon name="material-symbols:candlestick-chart-outline-rounded" size="1.5rem" class="lg:w-7 lg:h-7" />
         </div>
       </div>
     </section>
