@@ -1,6 +1,6 @@
 <template>
   <div>
-    <notifications class="p-5 text-md" width="25%" />
+    <notifications class="p-5 text-md pointer-events-none" width="25%" />
     <NuxtPage />
   </div>
 </template>
