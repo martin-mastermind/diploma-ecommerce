@@ -5,7 +5,7 @@ async function goHome () {
 </script>
 
 <template>
-  <header>
+  <header class="top-0 bg-white sticky z-10 pb-5">
     <ClientHeaderLogo @click="goHome" />
     <section class="flex gap-5 items-center justify-center">
       <ClientHeaderSearch />

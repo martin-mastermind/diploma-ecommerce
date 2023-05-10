@@ -24,4 +24,8 @@ input::-webkit-inner-spin-button {
 input[type=number] {
   -moz-appearance: textfield;
 }
+
+:root {
+  --vc-pgn-border-radius: 5rem;
+}
 </style>

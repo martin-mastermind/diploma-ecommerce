@@ -81,6 +81,9 @@ devDependencies:
   typescript:
     specifier: ^5.0.4
     version: 5.0.4
+  vue3-carousel:
+    specifier: ^0.3.1
+    version: 0.3.1(vue@3.2.47)
 
 packages:
 
@@ -8266,6 +8269,14 @@ packages:
       vue: ^3.2.0
     dependencies:
       '@vue/devtools-api': 6.5.0
+      vue: 3.2.47
+    dev: true
+
+  /vue3-carousel@0.3.1(vue@3.2.47):
+    resolution: {integrity: sha512-86vUkNPBzL2PVuR9w6hUsI90ccFjLp+K8cSFpRTISf+SjUQY3fMHc5CFF5MUL62v1xYYm27zEBmQupO9VQx9Kw==}
+    peerDependencies:
+      vue: ^3.2.0
+    dependencies:
       vue: 3.2.47
     dev: true
 

@@ -3,10 +3,10 @@
 </script>
 
 <template>
-  <div class="grid-area w-screen h-screen grid">
+  <div class="grid-area w-screen min-h-screen grid relative">
     <ClientHeader />
-    <ClientPromotions />
-    <ClientCatalog />
+    <ClientBasePromotions />
+    <ClientBaseCatalog />
     <ClientMenu />
   </div>
 </template>
@@ -18,8 +18,6 @@
       "promotions"
       "catalog"
       "menu";
-
-    grid-template-rows: auto 1fr 1fr auto;
   }
 
   /* @media (min-width: 1024px) {

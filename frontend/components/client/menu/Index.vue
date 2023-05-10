@@ -29,7 +29,7 @@ const menuItems = computed(() => [
 </script>
 
 <template>
-  <nav class="flex gap-5 justify-center">
+  <nav class="pt-1 sticky bottom-0 bg-white flex gap-2 justify-center transition-all">
     <ClientMenuItem v-for="item in menuItems" :key="item.id" :icon="item.icon" :title="item.title" />
   </nav>
 </template>
