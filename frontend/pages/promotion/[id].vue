@@ -5,8 +5,7 @@
 <template>
   <div class="grid-area min-h-screen grid relative">
     <ClientHeader />
-    <ClientBasePromotions />
-    <ClientBaseCatalog />
+    <ClientPromotion />
     <ClientMenu />
   </div>
 </template>
@@ -15,8 +14,8 @@
   .grid-area {
     grid-template-areas:
       "header"
-      "promotions"
-      "catalog"
+      "promotion"
       "menu";
+    grid-template-rows: auto 1fr auto;
   }
 </style>

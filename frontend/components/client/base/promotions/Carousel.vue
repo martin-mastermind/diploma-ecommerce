@@ -23,7 +23,7 @@ const promotions = computed(() => [
 <template>
   <Carousel :autoplay="5000" :wrap-around="true">
     <Slide v-for="promotion in promotions" :key="promotion.id">
-      <div class="h-40 md:h-60 lg:h-80 flex items-center justify-center cursor-pointer">
+      <div class="h-40 md:h-60 lg:h-80 flex items-center justify-center cursor-pointer" @click="navigateTo(`/promotion/${promotion.id}`)">
         <img class="w-full h-auto inline-block object-contain" :src="promotion.img" alt="" onerror="this.src = '/img/goods_placeholder.png'">
       </div>
     </Slide>
