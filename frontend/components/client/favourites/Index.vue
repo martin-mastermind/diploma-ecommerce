@@ -16,7 +16,7 @@ const favourites = computed(() => [
 <template>
   <article class="w-full p-2 flex flex-col gap-2 lg:px-10">
     <h1 class="text-2xl lg:text-3xl font-bold">
-      Избранное
+      Список избранных товаров
     </h1>
     <section v-if="favourites.length > 0" class="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-4">
       <div v-for="favourite in favourites" :key="favourite.id" class="flex flex-col gap-1 cursor-pointer p-5 rounded-lg hover:bg-blue-50 active:bg-blue-100 transition-colors select-none">
