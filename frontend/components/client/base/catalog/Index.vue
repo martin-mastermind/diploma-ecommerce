@@ -22,8 +22,8 @@ const goods = computed(() => [
 </script>
 
 <template>
-  <article class="p-2">
-    <h1 class="text-xl lg:text-2xl font-bold">
+  <article class="p-2 lg:px-10">
+    <h1 class="text-2xl lg:text-3xl font-bold">
       Может Вас заинтересовать
     </h1>
     <section class="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-4">

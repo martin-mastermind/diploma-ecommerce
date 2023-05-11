@@ -18,5 +18,7 @@
       "promotions"
       "catalog"
       "menu";
+
+      grid-template-rows: auto auto 1fr auto;
   }
 </style>
