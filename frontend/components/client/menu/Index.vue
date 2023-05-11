@@ -22,7 +22,7 @@ const menuItems = computed(() => [
     id: 4,
     icon: 'material-symbols:candlestick-chart-outline-rounded',
     title: 'Сравнение',
-    link: '/'
+    link: '/comparison'
   },
   {
     id: 5,

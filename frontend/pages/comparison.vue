@@ -19,8 +19,8 @@ const favourites = computed(() => [
       Избранное
     </h1>
     <section v-if="favourites.length > 0" class="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-4">
-      <div v-for="favourite in favourites" :key="favourite.id" class="flex flex-col gap-1 cursor-pointer p-5 rounded-lg hover:bg-blue-50 active:bg-blue-100 transition-colors select-none">
-        <img class="w-full aspect-square object-contain max-h-96" :src="favourite.img" alt="" onerror="this.src = '/img/goods_placeholder.png'">
+      <div v-for="favourite in favourites" :key="favourite.id" class="flex flex-col gap-1 cursor-pointer p-5 rounded-lg hover:bg-blue-100">
+        <img class="w-full aspect-square object-contain rounded-lg" :src="favourite.img" alt="" onerror="this.src = '/img/goods_placeholder.png'">
         <span class="text-lg font-bold">{{ favourite.title }}</span>
         <div class="flex gap-3 items-center">
           <div class="p-0.5 lg:p-1 rounded-full hover:bg-blue-100 active:bg-blue-200 transition-colors cursor-pointer">
