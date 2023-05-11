@@ -3,19 +3,9 @@
 </script>
 
 <template>
-  <div class="grid-area min-h-screen grid relative">
+  <div class="flex flex-col min-h-screen">
     <ClientHeader />
     <ClientPromotion />
     <ClientMenu />
   </div>
 </template>
-
-<style lang="scss" scoped>
-  .grid-area {
-    grid-template-areas:
-      "header"
-      "promotion"
-      "menu";
-    grid-template-rows: auto 1fr auto;
-  }
-</style>

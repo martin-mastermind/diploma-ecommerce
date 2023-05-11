@@ -46,9 +46,3 @@ const goods = computed(() => [
     </section>
   </article>
 </template>
-
-<style lang="scss" scoped>
-  article {
-    grid-area: catalog;
-  }
-</style>

@@ -32,14 +32,10 @@ const favourites = computed(() => [
         </div>
       </div>
     </section>
-    <section v-else>
-      <h2>У Вас нет избранных товаров...</h2>
+    <section v-else class="m-auto">
+      <h2 class="text-xl lg:text-2xl">
+        У Вас нет избранных товаров...
+      </h2>
     </section>
   </article>
 </template>
-
-<style lang="scss" scoped>
-  article {
-    grid-area: favourites;
-  }
-</style>

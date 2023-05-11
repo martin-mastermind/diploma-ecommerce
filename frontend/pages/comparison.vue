@@ -3,20 +3,9 @@
 </script>
 
 <template>
-  <div class="grid-area min-h-screen grid relative">
+  <div class="flex flex-col min-h-screen">
     <ClientHeader />
     <ClientComparison />
     <ClientMenu />
   </div>
 </template>
-
-<style lang="scss" scoped>
-  .grid-area {
-    grid-template-areas:
-      "header"
-      "comparison"
-      "menu";
-
-    grid-template-rows: auto 1fr auto;
-  }
-</style>
