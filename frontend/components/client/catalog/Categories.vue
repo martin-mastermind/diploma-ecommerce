@@ -29,11 +29,11 @@ const categories = computed(() => [
     </h1>
     <section v-if="categories.length > 0" class="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
       <div v-for="category in categories" :key="category.id" class="flex flex-col gap-3">
-        <h2 class="text-xl lg:text-2xl font-bold text-blue-900 select-none cursor-pointer hover:underline active:text-blue-950 transition-all">
+        <h2 class="text-xl lg:text-2xl font-bold text-blue-900 select-none cursor-pointer hover:underline active:text-blue-950 transition-all" @click="navigateTo(`/catalog/${category.id}`)">
           {{ category.title }}
         </h2>
         <ul v-if="category.children.length > 0" class="flex flex-col gap-3">
-          <li v-for="child in category.children" :key="child.id" class="text-lg lg:text-xl text-blue-800 select-none cursor-pointer hover:underline active:text-blue-900 transition-all">
+          <li v-for="child in category.children" :key="child.id" class="text-lg lg:text-xl text-blue-800 select-none cursor-pointer hover:underline active:text-blue-900 transition-all" @click="navigateTo(`/catalog/${child.id}`)">
             {{ child.title }}
           </li>
         </ul>
