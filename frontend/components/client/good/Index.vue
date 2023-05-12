@@ -39,7 +39,7 @@ const good = computed(() => (
 
 <template>
   <article class="w-full flex flex-col gap-5">
-    <header class="px-2 lg:px-10 flex gap-2 items-center mb-5" @click="goBack">
+    <header class="px-2 lg:px-10 flex gap-2 items-center mb-5 cursor-pointer" @click="goBack">
       <Icon name="material-symbols:arrow-back-ios-new-rounded" size="1.25rem" />
       <h1 class="text-2xl lg:text-3xl font-bold">
         {{ good.title }}
