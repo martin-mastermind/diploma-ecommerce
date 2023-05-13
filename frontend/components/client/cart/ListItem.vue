@@ -33,18 +33,12 @@ function updateAmount () {
       >шт.
     </label>
     <div class="flex gap-2">
-      <NuxtLink :to="`/good/${good.id}`" class="p-0.5 lg:p-1 rounded-full hover:bg-blue-100 active:bg-blue-200 transition-colors cursor-pointer">
-        <Icon name="material-symbols:open-in-new-rounded" size="1.5rem" class="lg:w-7 lg:h-7" />
+      <NuxtLink :to="`/good/${good.id}`">
+        <ClientUiIconButton name="material-symbols:open-in-new-rounded" />
       </NuxtLink>
-      <div class="p-0.5 lg:p-1 rounded-full hover:bg-blue-100 active:bg-blue-200 transition-colors cursor-pointer">
-        <Icon name="material-symbols:delete-outline-rounded" size="1.5rem" class="lg:w-7 lg:h-7" />
-      </div>
-      <div class="p-0.5 flex justify-center items-center lg:p-1 rounded-full hover:bg-blue-100 active:bg-blue-200 transition-colors cursor-pointer">
-        <Icon name="material-symbols:favorite-outline-rounded" size="1.5rem" class="lg:w-7 lg:h-7" />
-      </div>
-      <div class="p-0.5 flex justify-center items-center lg:p-1 rounded-full hover:bg-blue-100 active:bg-blue-200 transition-colors cursor-pointer">
-        <Icon name="material-symbols:candlestick-chart-outline-rounded" size="1.5rem" class="lg:w-7 lg:h-7" />
-      </div>
+      <ClientUiIconButton name="material-symbols:delete-outline-rounded" />
+      <ClientUiIconButton name="material-symbols:favorite-outline-rounded" />
+      <ClientUiIconButton name="material-symbols:candlestick-chart-outline-rounded" />
     </div>
   </div>
 </template>

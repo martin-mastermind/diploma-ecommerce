@@ -52,12 +52,8 @@ const good = computed(() => (
         Добавить в корзину
       </button>
       <div class="w-2/6 xl:w-1/2 xl:justify-around flex justify-center gap-5">
-        <div class="p-0.5 flex justify-center items-center lg:p-1 rounded-full hover:bg-blue-100 active:bg-blue-200 transition-colors cursor-pointer">
-          <Icon name="material-symbols:favorite-outline-rounded" size="1.5rem" class="lg:w-7 lg:h-7" />
-        </div>
-        <div class="p-0.5 flex justify-center items-center lg:p-1 rounded-full hover:bg-blue-100 active:bg-blue-200 transition-colors cursor-pointer">
-          <Icon name="material-symbols:candlestick-chart-outline-rounded" size="1.5rem" class="lg:w-7 lg:h-7" />
-        </div>
+        <ClientUiIconButton name="material-symbols:favorite-outline-rounded" />
+        <ClientUiIconButton name="material-symbols:candlestick-chart-outline-rounded" />
       </div>
     </section>
   </article>

@@ -27,14 +27,28 @@ const menuItems = computed(() => [
   {
     id: 5,
     icon: 'material-symbols:person-outline-rounded',
-    title: 'Профиль',
-    link: '/'
+    title: 'Профиль'
   }
 ])
+
+const isAuthModalOpened = ref(false)
+
+function openAuthModal (id: number) {
+  if (id !== 5) { return }
+  isAuthModalOpened.value = true
+}
 </script>
 
 <template>
-  <nav class="w-full mt-auto pt-1 sticky bottom-0 bg-white flex sm:gap-5 justify-center transition-all md:gap-10">
-    <ClientMenuItem v-for="item in menuItems" :key="item.id" :icon="item.icon" :title="item.title" :link="item.link" />
+  <nav class="w-full z-10 mt-auto pt-1 sticky bottom-0 bg-white flex sm:gap-5 justify-center transition-all md:gap-10">
+    <ClientMenuItem
+      v-for="item in menuItems"
+      :key="item.id"
+      :icon="item.icon"
+      :title="item.title"
+      :link="item.link"
+      @click="openAuthModal(item.id)"
+    />
+    <ClientMenuAuthModal v-model:is-opened="isAuthModalOpened" />
   </nav>
 </template>
