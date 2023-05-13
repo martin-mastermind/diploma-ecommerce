@@ -39,7 +39,7 @@ const good = computed(() => (
 
 <template>
   <article class="w-full flex flex-col gap-5">
-    <header class="px-2 lg:px-10 flex gap-2 items-center mb-5 cursor-pointer" @click="goBack">
+    <header class="px-2 lg:px-10 flex gap-2 items-center mb-5 cursor-pointer w-fit" @click="goBack">
       <Icon name="material-symbols:arrow-back-ios-new-rounded" size="1.25rem" />
       <h1 class="text-2xl lg:text-3xl font-bold">
         {{ good.title }}
@@ -48,7 +48,7 @@ const good = computed(() => (
     <ClientGoodInformation :good="good" />
     <ClientGoodReviews :rating="good.rating" />
     <section class="sticky bottom-[50px] md:bottom-[55px] lg:bottom-[68px] bg-white flex items-center gap-1">
-      <button class="p-3 w-4/6 xl:w-1/2 bg-blue-700 text-white">
+      <button class="p-3 w-4/6 xl:w-1/2 bg-blue-700 hover:bg-blue-800 active:bg-blue-900 text-white">
         Добавить в корзину
       </button>
       <div class="w-2/6 xl:w-1/2 xl:justify-around flex justify-center gap-5">

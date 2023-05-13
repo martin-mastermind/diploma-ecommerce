@@ -27,7 +27,7 @@ const goods = computed(() => [
 
 <template>
   <article class="w-full p-2 flex flex-col gap-2 lg:px-10">
-    <NuxtLink to="/catalog" class="flex gap-2 items-center mb-5">
+    <NuxtLink to="/catalog" class="flex gap-2 items-center mb-5 w-fit">
       <Icon name="material-symbols:arrow-back-ios-new-rounded" size="1.25rem" />
       <h1 class="text-2xl lg:text-3xl font-bold">
         {{ categoryTitle }}

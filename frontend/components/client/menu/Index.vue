@@ -10,7 +10,7 @@ const menuItems = computed(() => [
     id: 2,
     icon: 'material-symbols:shopping-cart-outline-rounded',
     title: 'Корзина',
-    link: '/'
+    link: '/cart'
   },
   {
     id: 3,
