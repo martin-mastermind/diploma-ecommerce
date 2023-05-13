@@ -30,13 +30,6 @@ const menuItems = computed(() => [
     title: 'Профиль'
   }
 ])
-
-const isAuthModalOpened = ref(false)
-
-function openAuthModal (id: number) {
-  if (id !== 5) { return }
-  isAuthModalOpened.value = true
-}
 </script>
 
 <template>
@@ -47,8 +40,7 @@ function openAuthModal (id: number) {
       :icon="item.icon"
       :title="item.title"
       :link="item.link"
-      @click="openAuthModal(item.id)"
     />
-    <ClientMenuAuthModal v-model:is-opened="isAuthModalOpened" />
+    <ClientAuth />
   </nav>
 </template>
