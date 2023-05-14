@@ -34,7 +34,7 @@ const menuItems = computed(() => [
 
 <template>
   <nav class="w-full z-10 mt-auto pt-1 sticky bottom-0 bg-white flex sm:gap-5 justify-center transition-all md:gap-10">
-    <ClientMenuItem
+    <ClientUiMenuItem
       v-for="item in menuItems"
       :key="item.id"
       :icon="item.icon"
