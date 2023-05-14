@@ -29,7 +29,7 @@ function saveChanges () {
 
 <template>
   <div v-if="isOpened" class="flex justify-center items-center fixed w-screen bg-black bg-opacity-50 inset-0">
-    <section class="w-[90%] bg-slate-100 rounded-sm p-5 overflow-auto flex flex-col gap-5">
+    <section class="w-[90%] bg-white rounded-sm p-5 overflow-auto flex flex-col gap-5">
       <header class="flex justify-between items-center">
         <h2 class="text-lg font-bold md:text-2xl">
           Редактирование адреса
@@ -45,7 +45,7 @@ function saveChanges () {
         <ClientUiInput v-model:value="data.apartment" label="Квартира" type="number" placeholder="45" />
       </article>
       <footer class="mt-auto flex w-full justify-end gap-5">
-        <button class="bg-slate-500 text-white px-5 py-3 rounded-md transition-colors disabled:bg-slate-400 hover:bg-slate-600 active:bg-slate-700" @click="saveChanges">
+        <button class="bg-blue-700 text-white px-5 py-3 rounded-md transition-colors disabled:bg-slate-400 hover:bg-blue-800 active:bg-blue-900" @click="saveChanges">
           Сохранить
         </button>
       </footer>
