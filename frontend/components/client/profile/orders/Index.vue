@@ -36,7 +36,7 @@ function cancelOrder (id?: number) {
     <h1 class="text-2xl lg:text-3xl font-bold">
       Список заказов
     </h1>
-    <div class="flex flex-col gap-2 justify-center lg:gap-10">
+    <section class="flex flex-col gap-2 justify-center lg:gap-10">
       <div v-for="order in orders" :key="order.id" class="p-5 border-b border-blue-950 flex items-center justify-between">
         <div class="flex gap-2 flex-col md:gap-4">
           <span class="text-lg md:text-xl font-bold">Заказ №{{ order.id }}</span>
@@ -48,6 +48,6 @@ function cancelOrder (id?: number) {
           <ClientUiIconButton name="material-symbols:close-rounded" @click="cancelOrder(order.id)" />
         </div>
       </div>
-    </div>
+    </section>
   </article>
 </template>
