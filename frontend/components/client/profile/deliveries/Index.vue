@@ -41,7 +41,7 @@ function askDelete (id: number) {
       Адреса достваки
     </h1>
     <div class="flex flex-col gap-2 justify-center">
-      <div v-for="delivery in userDeliveries" :key="delivery.id" class="md:text-xl p-5 border-b border-blue-950 flex items-center justify-between" :value="delivery.id">
+      <div v-for="delivery in userDeliveries" :key="delivery.id" class="md:text-xl p-5 border-b border-blue-950 flex items-center justify-between">
         {{ deliveryOption(delivery) }}
         <div class="w-1/4 flex gap-1 justify-center">
           <ClientUiIconButton name="material-symbols:edit-rounded" @click="toggleModal(delivery.id)" />
