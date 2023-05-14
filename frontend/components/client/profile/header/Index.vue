@@ -15,7 +15,7 @@ const menuItems = computed(() => [
   {
     id: 3,
     icon: 'material-symbols:file-copy-outline-rounded',
-    title: 'Прошлые заказы',
+    title: 'Заказы',
     link: '/profile/orders'
   },
   {
@@ -29,6 +29,11 @@ const menuItems = computed(() => [
     icon: 'material-symbols:help-center-outline-rounded',
     title: 'Тех.поддержка',
     link: '/profile/help'
+  },
+  {
+    id: 6,
+    icon: 'material-symbols:logout-rounded',
+    title: 'Выйти'
   }
 ])
 </script>

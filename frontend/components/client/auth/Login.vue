@@ -17,24 +17,8 @@ const emit = defineEmits(['switchAuth'])
       <ClientUiIconButton name="material-symbols:close-rounded" />
     </header>
     <article class="flex flex-col gap-5">
-      <label class="flex flex-col gap-1">
-        Email
-        <input
-          v-model="authData.email"
-          class="rounded-md outline-none border border-blue-950 p-2"
-          placeholder="test@email.com"
-          type="email"
-        >
-      </label>
-      <label class="flex flex-col gap-1">
-        Пароль
-        <input
-          v-model="authData.password"
-          class="rounded-md outline-none border border-blue-950 p-2"
-          placeholder="**********"
-          type="password"
-        >
-      </label>
+      <ClientUiInput v-model:value="authData.email" label="Email" placeholder="test@email.com" type="email" />
+      <ClientUiInput v-model:value="authData.password" label="Пароль" placeholder="**********" type="password" />
     </article>
     <footer class="mt-auto flex flex-col md:flex-row w-full justify-end gap-5">
       <button class="bg-blue-700 text-white px-5 py-3 rounded-md transition-colors disabled:bg-blue-400 hover:bg-blue-800 active:bg-blue-900">

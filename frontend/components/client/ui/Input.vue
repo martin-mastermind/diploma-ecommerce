@@ -1,7 +1,7 @@
 <script setup lang="ts">
 defineProps<{
   label: string
-  value: string
+  value: string | number | null
   type: string
   placeholder: string
 }>()
@@ -9,14 +9,6 @@ defineProps<{
 const emit = defineEmits(['update:value'])
 
 const inputRef = ref<HTMLInputElement | null>()
-const isDisabled = ref(true)
-
-function toggleField () {
-  if (!isDisabled.value) { emit('update:value', inputRef.value?.value) }
-  isDisabled.value = !isDisabled.value
-}
-
-const icon = computed(() => isDisabled.value ? 'material-symbols:edit-rounded' : 'material-symbols:save-outline-rounded')
 </script>
 
 <template>
@@ -29,9 +21,8 @@ const icon = computed(() => isDisabled.value ? 'material-symbols:edit-rounded' :
         class=" w-full rounded-md outline-none border border-blue-950 p-2"
         :placeholder="placeholder"
         :type="type"
-        :disabled="isDisabled"
+        @blur="emit('update:value', inputRef!.value)"
       >
-      <ClientUiIconButton :name="icon" @click="toggleField" />
     </div>
   </div>
 </template>
