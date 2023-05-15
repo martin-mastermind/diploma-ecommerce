@@ -210,5 +210,11 @@ declare global {
       weight: string
       price: number
     }
+
+    interface Category {
+      id: number
+      title: string
+      children?: Category[]
+    }
   }
 }
