@@ -1,5 +1,10 @@
 <script setup lang="ts">
+import { useComparison } from '~/store/comparison'
 
+const { getComparison } = useComparison()
+
+onMounted(getComparison)
+onServerPrefetch(getComparison)
 </script>
 
 <template>

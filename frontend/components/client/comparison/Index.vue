@@ -1,26 +1,7 @@
 <script setup lang="ts">
-const comparison = computed(() => [
-  {
-    id: 1,
-    title: 'Банан',
-    img: 'https://cs8.pikabu.ru/post_img/big/2016/04/21/5/1461224935173673.jpg',
-    characteristic: `Пищевая ценность на 100 г
-Белки: 1.5
-Жиры: 0.5
-Углеводы: 21
-Энергетическая ценность: 89 ккал / 372 кДж`,
-    weight: '1-1.2 кг',
-    price: 2.5
-  },
-  {
-    id: 2,
-    title: 'Яблоко',
-    img: '',
-    characteristic: '',
-    weight: '',
-    price: 1.89
-  }
-])
+import { useComparison } from '~/store/comparison'
+
+const comparisonStore = useComparison()
 </script>
 
 <template>
@@ -28,7 +9,7 @@ const comparison = computed(() => [
     <h1 class="text-2xl lg:text-3xl font-bold">
       Список сравнения
     </h1>
-    <section v-if="comparison.length > 0" class="w-full overflow-auto">
+    <section v-if="comparisonStore.comparison.length > 0" class="w-full overflow-auto">
       <table class="w-full border-collapse border border-blue-800">
         <thead class="bg-blue-800 text-white text-left">
           <tr>
@@ -51,7 +32,7 @@ const comparison = computed(() => [
           </tr>
         </thead>
         <tbody>
-          <tr v-for="compareGood in comparison" :key="compareGood.id" class="border-b border-blue-800 hover:bg-blue-50 transition-colors select-none">
+          <tr v-for="compareGood in comparisonStore.comparison" :key="compareGood.id" class="border-b border-blue-800 hover:bg-blue-50 transition-colors select-none">
             <td class="p-2">
               {{ compareGood.title }}
             </td>
@@ -72,7 +53,7 @@ const comparison = computed(() => [
                 <NuxtLink :to="`/good/${compareGood.id}`">
                   <ClientUiIconButton name="material-symbols:open-in-new-rounded" />
                 </NuxtLink>
-                <ClientUiIconButton name="material-symbols:delete-outline-rounded" />
+                <ClientUiIconButton name="material-symbols:delete-outline-rounded" @click="comparisonStore.removeComparison(compareGood.id)" />
               </div>
             </td>
           </tr>

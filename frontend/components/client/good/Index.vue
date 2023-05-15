@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useComparison } from '~/store/comparison'
 import { useGoods } from '~/store/goods'
 
 function goBack () {
@@ -6,6 +7,7 @@ function goBack () {
 }
 
 const goodsStore = useGoods()
+const comparisonStore = useComparison()
 </script>
 
 <template>
@@ -24,7 +26,7 @@ const goodsStore = useGoods()
       </button>
       <div class="w-2/6 xl:w-1/2 xl:justify-around flex justify-center gap-5">
         <ClientUiIconButton name="material-symbols:favorite-outline-rounded" />
-        <ClientUiIconButton name="material-symbols:candlestick-chart-outline-rounded" />
+        <ClientUiIconButton name="material-symbols:candlestick-chart-outline-rounded" @click="comparisonStore.toggleComparison(goodsStore.currentGood.id)" />
       </div>
     </section>
   </article>

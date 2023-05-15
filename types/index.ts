@@ -175,8 +175,8 @@ declare global {
       id: number
       title: string
       img: string
-      price: number
-      rating: {
+      price?: number
+      rating?: {
         total: number
         total_reviews: number
       }
@@ -193,12 +193,22 @@ declare global {
       origin_country: string
       description: string
       characteristic: string
+      price: number
       weight: string
       rating: {
         total: number
         total_reviews: number
         reviews: GoodReview[]
       }
+    }
+
+    interface Comparison {
+      id: number
+      title: string
+      img: string
+      characteristic: string
+      weight: string
+      price: number
     }
   }
 }

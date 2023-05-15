@@ -1,25 +1,16 @@
 <script setup lang="ts">
-const props = defineProps<{
-  good: {
-    id: number
-    title: string
-    img: string
-    price?: number
-    rating?: {
-      total: number
-      total_reviews: number
-    }
-  }
+import { useComparison } from '~/store/comparison'
+
+defineProps<{
+  good: Client.GoodPreview
   needAddButton?: boolean
 }>()
 
-async function openGood () {
-  await navigateTo(`/good/${props.good.id}`)
-}
+const comparisonStore = useComparison()
 </script>
 
 <template>
-  <div class="flex flex-col gap-1 cursor-pointer p-5 rounded-lg hover:bg-blue-50 active:bg-blue-100 transition-colors select-none" @click="openGood">
+  <div class="flex flex-col gap-1 cursor-pointer p-5 rounded-lg hover:bg-blue-50 active:bg-blue-100 transition-colors select-none" @click="navigateTo(`/good/${good.id}`)">
     <img class="w-full aspect-square object-contain max-h-96" :src="good.img" alt="" onerror="this.src = '/img/goods_placeholder.png'">
     <div v-if="good.rating" class="flex gap-1 items-end">
       <ClientUiStars :rating="good.rating.total" />
@@ -30,7 +21,7 @@ async function openGood () {
     <div class="flex gap-3 items-center">
       <ClientUiIconButton v-if="needAddButton" name="material-symbols:shopping-cart-outline-rounded" />
       <ClientUiIconButton name="material-symbols:favorite-outline-rounded" />
-      <ClientUiIconButton name="material-symbols:candlestick-chart-outline-rounded" />
+      <ClientUiIconButton name="material-symbols:candlestick-chart-outline-rounded" @click.stop="comparisonStore.toggleComparison(good.id)" />
     </div>
   </div>
 </template>
