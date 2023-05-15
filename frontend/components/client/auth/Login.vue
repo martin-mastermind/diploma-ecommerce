@@ -1,13 +1,9 @@
 <script setup lang="ts">
 import { useAuthModal } from '~/composables/client/useAuthModal'
+import { useLogin } from '~/composables/client/useLogin'
 
 const { closeModal, changeModalType } = useAuthModal()
-
-const authData = ref({
-  email: null,
-  password: null
-})
-
+const { data, cannotLogin, login } = useLogin()
 </script>
 
 <template>
@@ -19,11 +15,11 @@ const authData = ref({
       <ClientUiIconButton name="material-symbols:close-rounded" @click="closeModal" />
     </header>
     <article class="flex flex-col gap-5">
-      <ClientUiInput v-model:value="authData.email" class="lg:w-full" label="Email" placeholder="test@email.com" type="email" />
-      <ClientUiInput v-model:value="authData.password" class="lg:w-full" label="Пароль" placeholder="**********" type="password" />
+      <ClientUiInput v-model:value="data.email" class="lg:w-full" label="Email" placeholder="test@email.com" type="email" />
+      <ClientUiInput v-model:value="data.password" class="lg:w-full" label="Пароль" placeholder="**********" type="password" />
     </article>
     <footer class="mt-auto flex flex-col md:flex-row w-full justify-end gap-5">
-      <button class="bg-blue-700 text-white px-5 py-3 rounded-md transition-colors disabled:bg-blue-400 hover:bg-blue-800 active:bg-blue-900">
+      <button :disabled="cannotLogin" class="bg-blue-700 text-white px-5 py-3 rounded-md transition-colors disabled:bg-blue-400 hover:bg-blue-800 active:bg-blue-900" @click="login">
         Авторизоваться
       </button>
       <button class="bg-slate-500 text-white px-5 py-3 rounded-md transition-colors disabled:bg-slate-400 hover:bg-slate-600 active:bg-slate-700" @click="changeModalType('registration')">

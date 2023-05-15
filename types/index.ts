@@ -232,5 +232,12 @@ declare global {
       from: number
       to: number
     }
+
+    interface User {
+      id: number
+      name: string
+      phone: string
+      email: string
+    }
   }
 }

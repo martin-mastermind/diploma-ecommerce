@@ -21,7 +21,7 @@ const inputRef = ref<HTMLInputElement | null>()
         class=" w-full rounded-md outline-none border border-blue-950 p-2"
         :placeholder="placeholder"
         :type="type"
-        @blur="emit('update:value', inputRef!.value)"
+        @input="emit('update:value', inputRef!.value)"
       >
     </div>
   </div>

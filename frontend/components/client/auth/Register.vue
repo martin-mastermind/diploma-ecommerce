@@ -1,15 +1,9 @@
 <script setup lang="ts">
 import { useAuthModal } from '~/composables/client/useAuthModal'
+import { useRegister } from '~/composables/client/useRegister'
 
 const { closeModal, changeModalType } = useAuthModal()
-
-const registrationData = ref({
-  email: null,
-  name: null,
-  phone: null,
-  password: null
-})
-
+const { data, cannotRegister, register } = useRegister()
 </script>
 
 <template>
@@ -21,13 +15,13 @@ const registrationData = ref({
       <ClientUiIconButton name="material-symbols:close-rounded" @click="closeModal" />
     </header>
     <article class="flex flex-col gap-5">
-      <ClientUiInput v-model:value="registrationData.name" class="lg:w-full" label="Имя" placeholder="Иван" type="text" />
-      <ClientUiInput v-model:value="registrationData.email" class="lg:w-full" label="Email" placeholder="test@email.com" type="email" />
-      <ClientUiInput v-model:value="registrationData.phone" class="lg:w-full" label="Номер телефона" placeholder="+375257075176" type="tel" />
-      <ClientUiInput v-model:value="registrationData.password" class="lg:w-full" label="Пароль" placeholder="**********" type="password" />
+      <ClientUiInput v-model:value="data.name" class="lg:w-full" label="Имя" placeholder="Иван" type="text" />
+      <ClientUiInput v-model:value="data.email" class="lg:w-full" label="Email" placeholder="test@email.com" type="email" />
+      <ClientUiInput v-model:value="data.phone" class="lg:w-full" label="Номер телефона" placeholder="+375257075176" type="tel" />
+      <ClientUiInput v-model:value="data.password" class="lg:w-full" label="Пароль" placeholder="**********" type="password" />
     </article>
     <footer class="mt-auto flex flex-col md:flex-row w-full justify-end gap-5">
-      <button class="bg-blue-700 text-white px-5 py-3 rounded-md transition-colors disabled:bg-blue-400 hover:bg-blue-800 active:bg-blue-900">
+      <button :disabled="cannotRegister" class="bg-blue-700 text-white px-5 py-3 rounded-md transition-colors disabled:bg-blue-400 hover:bg-blue-800 active:bg-blue-900" @click="register">
         Зарегистрироваться
       </button>
       <button class="bg-slate-500 text-white px-5 py-3 rounded-md transition-colors disabled:bg-slate-400 hover:bg-slate-600 active:bg-slate-700" @click="changeModalType('login')">

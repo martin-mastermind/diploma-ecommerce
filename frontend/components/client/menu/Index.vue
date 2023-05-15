@@ -1,4 +1,10 @@
 <script setup lang="ts">
+import { useAuthModal } from '~/composables/client/useAuthModal'
+import { useUser } from '~/store/client/user'
+
+const { openModal, changeModalType } = useAuthModal()
+const { user, verifyUser } = useUser()
+
 const menuItems = computed(() => [
   {
     id: 1,
@@ -27,9 +33,24 @@ const menuItems = computed(() => [
   {
     id: 5,
     icon: 'material-symbols:person-outline-rounded',
-    title: 'Профиль'
+    title: user?.name ?? 'Профиль',
+    link: '/profile'
   }
 ])
+
+const onlyAuthItems = [2, 3, 5]
+
+async function checkForAuth (id: number, link: string) {
+  const hasAuth = await verifyUser()
+
+  if (!hasAuth && onlyAuthItems.includes(id)) {
+    changeModalType('login')
+    openModal()
+    return
+  }
+
+  await navigateTo(link)
+}
 </script>
 
 <template>
@@ -40,7 +61,9 @@ const menuItems = computed(() => [
       :icon="item.icon"
       :title="item.title"
       :link="item.link"
+      :additional-check="true"
+      @click="checkForAuth(item.id, item.link)"
     />
-    <ClientAuth />
+    <LazyClientAuth />
   </nav>
 </template>

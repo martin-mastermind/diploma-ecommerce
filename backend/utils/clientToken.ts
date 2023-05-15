@@ -1,6 +1,6 @@
 import { JWT } from './JWT'
 
-const jwt = new JWT('admin', 'admin-token')
+const jwt = new JWT('client', 'client-token')
 
 export function generateToken (userId: number) {
   return jwt.generateToken(userId)
