@@ -1,5 +1,7 @@
 <script setup lang="ts">
-const isOpened = ref(false)
+import { useAuthModal } from '~/composables/client/useAuthModal'
+
+const { isOpened } = useAuthModal()
 
 const isLoginActive = ref(true)
 

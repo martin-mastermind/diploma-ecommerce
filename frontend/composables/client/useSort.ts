@@ -1,7 +1,7 @@
 import { useEvent, useListen } from '~/composables/utils/useEventBus'
 
 export function useSort () {
-  const isSortOpen = ref(false)
+  const isSortOpened = ref(false)
   const sortOptions = ref<Client.CatalogSort[]>([
     {
       type: 'default',
@@ -24,14 +24,14 @@ export function useSort () {
 
   useListen('catalog:dropdown', (event) => {
     if (event === 'filter') {
-      isSortOpen.value = false
+      isSortOpened.value = false
       return
     }
-    if (event === 'sort' && isSortOpen.value) {
-      isSortOpen.value = false
+    if (event === 'sort' && isSortOpened.value) {
+      isSortOpened.value = false
       return
     }
-    isSortOpen.value = true
+    isSortOpened.value = true
   })
 
   function toggleSort () {
@@ -44,5 +44,5 @@ export function useSort () {
     useEvent('catalog:update', { sort: selectedSort.value })
   }
 
-  return { isSortOpen, sortOptions, selectedSort, toggleSort, changeSort }
+  return { isSortOpened, sortOptions, selectedSort, toggleSort, changeSort }
 }

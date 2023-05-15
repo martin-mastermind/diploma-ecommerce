@@ -1,7 +1,7 @@
 import { useEvent, useListen } from '~/composables/utils/useEventBus'
 
 export function useFilter () {
-  const isFilterOpen = ref(false)
+  const isFilterOpened = ref(false)
   const filterValue = ref<{ from: string | null, to: string | null }>({
     from: null,
     to: null
@@ -9,14 +9,14 @@ export function useFilter () {
 
   useListen('catalog:dropdown', (event) => {
     if (event === 'sort') {
-      isFilterOpen.value = false
+      isFilterOpened.value = false
       return
     }
-    if (event === 'filter' && isFilterOpen.value) {
-      isFilterOpen.value = false
+    if (event === 'filter' && isFilterOpened.value) {
+      isFilterOpened.value = false
       return
     }
-    isFilterOpen.value = true
+    isFilterOpened.value = true
   })
 
   function toggleFilter () {
@@ -43,5 +43,5 @@ export function useFilter () {
     useEvent('catalog:update', { filter: { from: +(filterValue.value.from || 0), to: +(filterValue.value.to || 99.99) } })
   }
 
-  return { isFilterOpen, filterValue, toggleFilter, applyFilter }
+  return { isFilterOpened, filterValue, toggleFilter, applyFilter }
 }

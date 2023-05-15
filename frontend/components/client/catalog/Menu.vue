@@ -2,8 +2,8 @@
 import { useSort } from '~/composables/client/useSort'
 import { useFilter } from '~/composables/client/useFilter'
 
-const { isSortOpen, sortOptions, selectedSort, toggleSort, changeSort } = useSort()
-const { isFilterOpen, filterValue, toggleFilter, applyFilter } = useFilter()
+const { isSortOpened, sortOptions, selectedSort, toggleSort, changeSort } = useSort()
+const { isFilterOpened, filterValue, toggleFilter, applyFilter } = useFilter()
 </script>
 
 <template>
@@ -11,9 +11,9 @@ const { isFilterOpen, filterValue, toggleFilter, applyFilter } = useFilter()
     <div class="w-1/2 p-2 border-r border-blue-950 relative">
       <p class="w-full flex gap-2 justify-center cursor-pointer select-none" @click="toggleSort">
         <span>Сортировка</span>
-        <Icon name="prime:sort-alt" size="1.5rem" :data-open="isSortOpen" class="data-[open=true]:text-blue-950 transition-all" />
+        <Icon name="prime:sort-alt" size="1.5rem" :data-open="isSortOpened" class="data-[open=true]:text-blue-950 transition-all" />
       </p>
-      <div :data-active="isSortOpen" class="rounded-lg w-[250px] bg-white z-10 absolute hidden data-[active=true]:flex shadow-md p-5 flex-col gap-3 md:w-full max-w-md">
+      <div :data-active="isSortOpened" class="rounded-lg w-[250px] bg-white z-10 absolute hidden data-[active=true]:flex shadow-md p-5 flex-col gap-3 md:w-full max-w-md">
         <div v-for="option in sortOptions" :key="option.type" :data-selected="selectedSort === option.type" class="data-[selected=true]:underline data-[selected=true]:font-bold cursor-pointer hover:underline" @click="changeSort(option.type)">
           {{ option.title }}
         </div>
@@ -22,9 +22,9 @@ const { isFilterOpen, filterValue, toggleFilter, applyFilter } = useFilter()
     <div class="w-1/2 p-2 flex gap-2 justify-center relative">
       <p class="w-full flex gap-2 justify-center cursor-pointer select-none" @click="toggleFilter">
         <span>Фильтр</span>
-        <Icon name="material-symbols:filter-list-rounded" size="1.5rem" :data-open="isFilterOpen" class="data-[open=true]:text-blue-950 transition-all" />
+        <Icon name="material-symbols:filter-list-rounded" size="1.5rem" :data-open="isFilterOpened" class="data-[open=true]:text-blue-950 transition-all" />
       </p>
-      <div :data-active="isFilterOpen" class="rounded-lg w-[250px] left-[-125px] top-[25px] bg-white z-10 absolute hidden data-[active=true]:flex shadow-md p-5 flex-col gap-3 md:w-full max-w-md md:left-0 xl:left-1/2 xl:-translate-x-1/2">
+      <div :data-active="isFilterOpened" class="rounded-lg w-[250px] left-[-125px] top-[25px] bg-white z-10 absolute hidden data-[active=true]:flex shadow-md p-5 flex-col gap-3 md:w-full max-w-md md:left-0 xl:left-1/2 xl:-translate-x-1/2">
         <span class="font-bold">Цена</span>
         <form class="flex flex-col gap-2">
           <label class="flex flex-col gap-1">От<input v-model="filterValue.from" class="rounded-md outline-none border border-blue-950 p-2" placeholder="0.00" type="number"></label>

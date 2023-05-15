@@ -1,4 +1,8 @@
 <script setup lang="ts">
+import { useAuthModal } from '~/composables/client/useAuthModal'
+
+const { closeModal } = useAuthModal()
+
 const authData = ref({
   email: null,
   password: null
@@ -14,7 +18,7 @@ const emit = defineEmits(['switchAuth'])
       <h2 class="text-3xl font-bold">
         Авторизация
       </h2>
-      <ClientUiIconButton name="material-symbols:close-rounded" />
+      <ClientUiIconButton name="material-symbols:close-rounded" @click="closeModal" />
     </header>
     <article class="flex flex-col gap-5">
       <ClientUiInput v-model:value="authData.email" class="lg:w-full" label="Email" placeholder="test@email.com" type="email" />

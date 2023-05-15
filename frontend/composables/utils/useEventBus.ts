@@ -7,6 +7,7 @@ type ApplicationEvents = {
     sort?: Client.CatalogSortType
     filter?: Client.CatalogFilter
   }
+  'auth:modal': boolean
 }
 
 const emitter = mitt<ApplicationEvents>()

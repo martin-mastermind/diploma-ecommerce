@@ -1,4 +1,8 @@
 <script setup lang="ts">
+import { useAuthModal } from '~/composables/client/useAuthModal'
+
+const { closeModal } = useAuthModal()
+
 const registrationData = ref({
   email: null,
   name: null,
@@ -16,7 +20,7 @@ const emit = defineEmits(['switchAuth'])
       <h2 class="text-3xl font-bold">
         Регистрация
       </h2>
-      <ClientUiIconButton name="material-symbols:close-rounded" />
+      <ClientUiIconButton name="material-symbols:close-rounded" @click="closeModal" />
     </header>
     <article class="flex flex-col gap-5">
       <ClientUiInput v-model:value="registrationData.name" class="lg:w-full" label="Имя" placeholder="Иван" type="text" />
