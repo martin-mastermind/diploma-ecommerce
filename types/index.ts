@@ -170,5 +170,35 @@ declare global {
       total_discount: number
       rules: Rule[]
     }
+
+    interface GoodPreview {
+      id: number
+      title: string
+      img: string
+      price: number
+      rating: {
+        total: number
+        total_reviews: number
+      }
+    }
+
+    interface GoodReview {
+      name: string
+      message: string
+      rating: number
+    }
+
+    interface Good extends GoodPreview {
+      vendor_code: string
+      origin_country: string
+      description: string
+      characteristic: string
+      weight: string
+      rating: {
+        total: number
+        total_reviews: number
+        reviews: GoodReview[]
+      }
+    }
   }
 }

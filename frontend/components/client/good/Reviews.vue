@@ -4,6 +4,7 @@ const starReviews = computed(() => (star: number) => props.rating.reviews.filter
 const props = defineProps<{
   rating: {
     total: number
+    total_reviews: number
     reviews: {name: string, message: string, rating: number}[]
   }
 }>()
@@ -19,7 +20,7 @@ const props = defineProps<{
         <ClientUiStars :is-big="true" :rating="rating.total" />
         <h3 class="text-xl font-bold">{{ rating.total }}</h3>
       </span>
-      <span class="text-sm text-gray-500">{{ rating.reviews.length }} отзыва/-ов</span>
+      <span class="text-sm text-gray-500">{{ rating.total_reviews }} отзыва/-ов</span>
     </section>
     <section class="flex flex-col gap-1 ml-1">
       <div v-for="star in [5, 4, 3, 2, 1, 0]" :key="star" class="flex gap-2 items-center">
