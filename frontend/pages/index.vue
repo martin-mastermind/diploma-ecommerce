@@ -5,7 +5,7 @@
 <template>
   <div class="flex flex-col min-h-screen">
     <ClientHeader />
-    <ClientBasePromotions />
+    <LazyClientBasePromotions />
     <ClientBaseCatalog />
     <ClientMenu />
   </div>

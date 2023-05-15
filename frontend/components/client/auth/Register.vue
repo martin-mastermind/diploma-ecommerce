@@ -19,10 +19,10 @@ const emit = defineEmits(['switchAuth'])
       <ClientUiIconButton name="material-symbols:close-rounded" />
     </header>
     <article class="flex flex-col gap-5">
-      <ClientUiInput v-model:value="registrationData.name" label="Имя" placeholder="Иван" type="text" />
-      <ClientUiInput v-model:value="registrationData.email" label="Email" placeholder="test@email.com" type="email" />
-      <ClientUiInput v-model:value="registrationData.phone" label="Номер телефона" placeholder="+375257075176" type="tel" />
-      <ClientUiInput v-model:value="registrationData.password" label="Пароль" placeholder="**********" type="password" />
+      <ClientUiInput v-model:value="registrationData.name" class="lg:w-full" label="Имя" placeholder="Иван" type="text" />
+      <ClientUiInput v-model:value="registrationData.email" class="lg:w-full" label="Email" placeholder="test@email.com" type="email" />
+      <ClientUiInput v-model:value="registrationData.phone" class="lg:w-full" label="Номер телефона" placeholder="+375257075176" type="tel" />
+      <ClientUiInput v-model:value="registrationData.password" class="lg:w-full" label="Пароль" placeholder="**********" type="password" />
     </article>
     <footer class="mt-auto flex flex-col md:flex-row w-full justify-end gap-5">
       <button class="bg-blue-700 text-white px-5 py-3 rounded-md transition-colors disabled:bg-blue-400 hover:bg-blue-800 active:bg-blue-900">

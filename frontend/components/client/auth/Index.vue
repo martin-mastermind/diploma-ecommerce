@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const isOpened = ref(true)
+const isOpened = ref(false)
 
 const isLoginActive = ref(true)
 

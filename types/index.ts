@@ -151,4 +151,24 @@ declare global {
     messages: AppealMessage[]
     status: 'new' | 'in-work' | 'closed'
   }
+
+  namespace Client {
+    interface Rule {
+      category: string
+      discount: number
+    }
+
+    interface PromotionPreview {
+      id: number
+      img: string
+    }
+
+    interface Promotion {
+      title: string
+      message: string
+      img: string
+      total_discount: number
+      rules: Rule[]
+    }
+  }
 }

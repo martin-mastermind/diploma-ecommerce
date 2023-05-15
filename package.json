@@ -38,6 +38,7 @@
   "dependencies": {
     "@kyvg/vue3-notification": "^2.9.0",
     "@vuelidate/core": "^2.0.2",
-    "@vuelidate/validators": "^2.0.2"
+    "@vuelidate/validators": "^2.0.2",
+    "mitt": "^3.0.0"
   }
 }
