@@ -1,14 +1,12 @@
 <script setup lang="ts">
 import { useAuthModal } from '~/composables/client/useAuthModal'
 
-const { closeModal } = useAuthModal()
+const { closeModal, changeModalType } = useAuthModal()
 
 const authData = ref({
   email: null,
   password: null
 })
-
-const emit = defineEmits(['switchAuth'])
 
 </script>
 
@@ -28,7 +26,7 @@ const emit = defineEmits(['switchAuth'])
       <button class="bg-blue-700 text-white px-5 py-3 rounded-md transition-colors disabled:bg-blue-400 hover:bg-blue-800 active:bg-blue-900">
         Авторизоваться
       </button>
-      <button class="bg-slate-500 text-white px-5 py-3 rounded-md transition-colors disabled:bg-slate-400 hover:bg-slate-600 active:bg-slate-700" @click="emit('switchAuth')">
+      <button class="bg-slate-500 text-white px-5 py-3 rounded-md transition-colors disabled:bg-slate-400 hover:bg-slate-600 active:bg-slate-700" @click="changeModalType('registration')">
         Зарегистрироваться
       </button>
     </footer>

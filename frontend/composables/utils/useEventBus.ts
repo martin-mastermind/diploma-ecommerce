@@ -8,6 +8,7 @@ type ApplicationEvents = {
     filter?: Client.CatalogFilter
   }
   'auth:modal': boolean
+  'auth:type': 'login' | 'registration'
 }
 
 const emitter = mitt<ApplicationEvents>()
