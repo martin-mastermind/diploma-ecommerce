@@ -25,5 +25,15 @@ export const useGoods = defineStore('goodsStore', () => {
     return true
   }
 
-  return { baseGoods, currentGood, getBaseGoods, getGood }
+  async function addGoodReview (rating: number, message: string) {
+    const result = await useApi(`/api/goods/${currentGood.value!.id}`, { rating, message }).post()
+
+    if (result === false) { return false }
+
+    currentGood.value = result as Client.Good
+
+    return true
+  }
+
+  return { baseGoods, currentGood, getBaseGoods, getGood, addGoodReview }
 })

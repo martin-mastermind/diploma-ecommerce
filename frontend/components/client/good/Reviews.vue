@@ -1,9 +1,24 @@
 <script setup lang="ts">
+import { useReviews } from '~/composables/client/useReviews'
+import { useUser } from '~/store/client/user'
+
 const starReviews = computed(() => (star: number) => props.rating.reviews!.filter(r => r.rating === star).length)
 
 const props = defineProps<{
   rating: Client.GoodRating
 }>()
+
+const { verifyUser } = useUser()
+
+const { data, cannotSend, send } = useReviews()
+const hasAuth = ref(false)
+
+onMounted(async () => {
+  hasAuth.value = await verifyUser()
+})
+onServerPrefetch(async () => {
+  hasAuth.value = await verifyUser()
+})
 </script>
 
 <template>
@@ -37,19 +52,26 @@ const props = defineProps<{
         </p>
       </div>
     </section>
-    <section class="flex flex-col gap-2">
+    <section v-if="hasAuth" class="flex flex-col gap-2">
       <h3 class="text-lg font-bold">
         Оставьте свой отзыв
       </h3>
       <label class="flex flex-col gap-1">
         Оценка (от 0 до 5)
-        <input class="max-w-xl border border-blue-900 p-2 rounded-lg" type="number" min="0" max="5" step="1">
+        <input
+          v-model="data.rating"
+          class="max-w-xl border border-blue-900 p-2 rounded-lg"
+          type="number"
+          min="0"
+          max="5"
+          step="1"
+        >
       </label>
       <label class="flex flex-col gap-1">
         Сообщение
-        <textarea class="max-w-xl border border-blue-900 p-2 rounded-lg resize-none overflow-auto" cols="30" rows="10" />
+        <textarea v-model="data.message" class="max-w-xl border border-blue-900 p-2 rounded-lg resize-none overflow-auto" cols="30" rows="10" />
       </label>
-      <button class="max-w-xl bg-blue-700 text-white p-2 rounded-lg">
+      <button :disabled="cannotSend" class="max-w-xl bg-blue-700 text-white p-2 rounded-lg" @click="send">
         Отправить
       </button>
     </section>

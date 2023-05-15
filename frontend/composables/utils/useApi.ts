@@ -13,7 +13,7 @@ export function useApi (url: string, props?: object) {
     })
 
     if (apiError.value?.statusCode === 403) {
-      await navigateTo('/admin/login')
+      await navigateTo('/')
     }
   })
 
