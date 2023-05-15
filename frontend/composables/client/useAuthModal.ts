@@ -1,4 +1,5 @@
 import { useEvent, useListen } from '~/composables/utils/useEventBus'
+import { useUser } from '~/store/client/user'
 
 export function useAuthModal () {
   const isOpened = ref(false)
@@ -24,5 +25,16 @@ export function useAuthModal () {
     useEvent('auth:modal', true)
   }
 
-  return { isOpened, modalType, changeModalType, closeModal, openModal }
+  async function checkForAuth () {
+    const { verifyUser } = useUser()
+    const hasAuth = await verifyUser()
+
+    if (hasAuth) { return true }
+
+    changeModalType('login')
+    openModal()
+    return false
+  }
+
+  return { isOpened, modalType, changeModalType, closeModal, openModal, checkForAuth }
 }

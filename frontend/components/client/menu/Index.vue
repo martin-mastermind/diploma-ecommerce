@@ -2,8 +2,8 @@
 import { useAuthModal } from '~/composables/client/useAuthModal'
 import { useUser } from '~/store/client/user'
 
-const { openModal, changeModalType } = useAuthModal()
-const { user, verifyUser } = useUser()
+const { checkForAuth } = useAuthModal()
+const { user } = useUser()
 
 const menuItems = computed(() => [
   {
@@ -40,14 +40,8 @@ const menuItems = computed(() => [
 
 const onlyAuthItems = [2, 3, 5]
 
-async function checkForAuth (id: number, link: string) {
-  const hasAuth = await verifyUser()
-
-  if (!hasAuth && onlyAuthItems.includes(id)) {
-    changeModalType('login')
-    openModal()
-    return
-  }
+async function navigate (id: number, link: string) {
+  if (onlyAuthItems.includes(id) && !await checkForAuth()) { return }
 
   await navigateTo(link)
 }
@@ -62,7 +56,7 @@ async function checkForAuth (id: number, link: string) {
       :title="item.title"
       :link="item.link"
       :additional-check="true"
-      @click="checkForAuth(item.id, item.link)"
+      @click="navigate(item.id, item.link)"
     />
     <LazyClientAuth />
   </nav>

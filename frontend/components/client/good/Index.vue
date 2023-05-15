@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { useComparison } from '~/store/client/comparison'
+import { useAuthModal } from '~/composables/client/useAuthModal'
+import { useFavourites } from '~/store/client/favourites'
 import { useGoods } from '~/store/client/goods'
 
 function goBack () {
@@ -8,6 +10,15 @@ function goBack () {
 
 const goodsStore = useGoods()
 const comparisonStore = useComparison()
+
+const { checkForAuth } = useAuthModal()
+const { toggleFavourite } = useFavourites()
+
+async function checkFavourite () {
+  if (!await checkForAuth()) { return }
+
+  await toggleFavourite(goodsStore.currentGood!.id)
+}
 </script>
 
 <template>
@@ -25,7 +36,7 @@ const comparisonStore = useComparison()
         Добавить в корзину
       </button>
       <div class="w-2/6 xl:w-1/2 xl:justify-around flex justify-center gap-5">
-        <ClientUiIconButton name="material-symbols:favorite-outline-rounded" />
+        <ClientUiIconButton name="material-symbols:favorite-outline-rounded" @click="checkFavourite" />
         <ClientUiIconButton name="material-symbols:candlestick-chart-outline-rounded" @click="comparisonStore.toggleComparison(goodsStore.currentGood.id)" />
       </div>
     </section>

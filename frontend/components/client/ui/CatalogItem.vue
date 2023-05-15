@@ -1,12 +1,23 @@
 <script setup lang="ts">
 import { useComparison } from '~/store/client/comparison'
+import { useAuthModal } from '~/composables/client/useAuthModal'
+import { useFavourites } from '~/store/client/favourites'
 
-defineProps<{
+const { checkForAuth } = useAuthModal()
+const { toggleFavourite } = useFavourites()
+
+const props = defineProps<{
   good: Client.GoodPreview
   needAddButton?: boolean
 }>()
 
 const comparisonStore = useComparison()
+
+async function checkFavourite () {
+  if (!await checkForAuth()) { return }
+
+  await toggleFavourite(props.good.id)
+}
 </script>
 
 <template>
@@ -20,7 +31,7 @@ const comparisonStore = useComparison()
     <span class="text-lg font-bold">{{ good.title }}</span>
     <div class="flex gap-3 items-center">
       <ClientUiIconButton v-if="needAddButton" name="material-symbols:shopping-cart-outline-rounded" />
-      <ClientUiIconButton name="material-symbols:favorite-outline-rounded" />
+      <ClientUiIconButton name="material-symbols:favorite-outline-rounded" @click="checkFavourite" />
       <ClientUiIconButton name="material-symbols:candlestick-chart-outline-rounded" @click.stop="comparisonStore.toggleComparison(good.id)" />
     </div>
   </div>
