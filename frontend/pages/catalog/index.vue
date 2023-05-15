@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useCatalog } from '~/store/catalog'
+import { useCatalog } from '~/store/client/catalog'
 
 const { getCategories } = useCatalog()
 
@@ -10,7 +10,7 @@ onServerPrefetch(getCategories)
 <template>
   <div class="flex flex-col min-h-screen">
     <ClientHeader />
-    <ClientCatalogCategories />
+    <LazyClientCatalogCategories />
     <ClientMenu />
   </div>
 </template>

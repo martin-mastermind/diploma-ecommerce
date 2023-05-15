@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useComparison } from '~/store/comparison'
+import { useComparison } from '~/store/client/comparison'
 
 const comparisonStore = useComparison()
 </script>

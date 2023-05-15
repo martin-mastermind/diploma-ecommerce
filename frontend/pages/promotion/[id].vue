@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { usePromotions } from '~/store/promotions'
+import { usePromotions } from '~/store/client/promotions'
 
 const { getPromotion } = usePromotions()
 onMounted(() => getPromotion(+useRoute().params.id))
@@ -9,7 +9,7 @@ onServerPrefetch(() => getPromotion(+useRoute().params.id))
 <template>
   <div class="flex flex-col min-h-screen">
     <ClientHeader />
-    <ClientPromotion />
+    <LazyClientPromotion />
     <ClientMenu />
   </div>
 </template>

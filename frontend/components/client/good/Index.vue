@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { useComparison } from '~/store/comparison'
-import { useGoods } from '~/store/goods'
+import { useComparison } from '~/store/client/comparison'
+import { useGoods } from '~/store/client/goods'
 
 function goBack () {
   useRouter().go(-1)

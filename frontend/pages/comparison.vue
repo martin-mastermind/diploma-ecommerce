@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useComparison } from '~/store/comparison'
+import { useComparison } from '~/store/client/comparison'
 
 const { getComparison } = useComparison()
 
@@ -10,7 +10,7 @@ onServerPrefetch(getComparison)
 <template>
   <div class="flex flex-col min-h-screen">
     <ClientHeader />
-    <ClientComparison />
+    <LazyClientComparison />
     <ClientMenu />
   </div>
 </template>

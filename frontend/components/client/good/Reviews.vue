@@ -1,12 +1,8 @@
 <script setup lang="ts">
-const starReviews = computed(() => (star: number) => props.rating.reviews.filter(r => r.rating === star).length)
+const starReviews = computed(() => (star: number) => props.rating.reviews!.filter(r => r.rating === star).length)
 
 const props = defineProps<{
-  rating: {
-    total: number
-    total_reviews: number
-    reviews: {name: string, message: string, rating: number}[]
-  }
+  rating: Client.GoodRating
 }>()
 </script>
 

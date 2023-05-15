@@ -1,18 +1,6 @@
 <script setup lang="ts">
 defineProps<{
-  good: {
-    img: string,
-    origin_country: string
-    vendor_code: string
-    price: number
-    weight: string
-    description: string
-    characteristic: string
-    rating: {
-      total: number
-      reviews: {name: string, message: string, rating: number}[]
-    }
-  }
+  good: Client.Good
 }>()
 </script>
 
@@ -20,7 +8,7 @@ defineProps<{
   <section class="px-2 lg:px-10 flex flex-col gap-5">
     <div class="flex gap-2 items-center">
       <ClientUiStars :rating="good.rating.total" />
-      <span class="text-sm">{{ good.rating.reviews.length }}</span>
+      <span class="text-sm">{{ good.rating.reviews!.length }}</span>
     </div>
     <div class="flex">
       <img class=" aspect-square object-contain max-h-96" :src="good.img" alt="" onerror="this.src = '/img/goods_placeholder.png'">

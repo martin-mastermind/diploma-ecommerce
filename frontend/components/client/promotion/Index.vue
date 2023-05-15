@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { usePromotions } from '~/store/promotions'
+import { usePromotions } from '~/store/client/promotions'
 
 const promotionsStore = usePromotions()
 </script>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useCatalog } from '~/store/catalog'
+import { useCatalog } from '~/store/client/catalog'
 
 const catalogStore = useCatalog()
 </script>

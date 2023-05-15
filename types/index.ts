@@ -171,21 +171,24 @@ declare global {
       rules: Rule[]
     }
 
+    interface GoodReview {
+      name: string
+      message: string
+      rating: number
+    }
+
+    interface GoodRating {
+      total: number
+      total_reviews: number
+      reviews?: GoodReview[]
+    }
+
     interface GoodPreview {
       id: number
       title: string
       img: string
       price?: number
-      rating?: {
-        total: number
-        total_reviews: number
-      }
-    }
-
-    interface GoodReview {
-      name: string
-      message: string
-      rating: number
+      rating?: GoodRating
     }
 
     interface Good extends GoodPreview {
@@ -195,11 +198,7 @@ declare global {
       characteristic: string
       price: number
       weight: string
-      rating: {
-        total: number
-        total_reviews: number
-        reviews: GoodReview[]
-      }
+      rating: GoodRating
     }
 
     interface Comparison {
@@ -215,6 +214,23 @@ declare global {
       id: number
       title: string
       children?: Category[]
+    }
+
+    interface Catalog {
+      title: string
+      goods: GoodPreview[]
+    }
+
+    type CatalogSortType = 'default' | 'price-down' | 'price-up' | 'rating'
+
+    interface CatalogSort {
+      type: CatalogSortType
+      title: string
+    }
+
+    interface CatalogFilter {
+      from: number
+      to: number
     }
   }
 }
