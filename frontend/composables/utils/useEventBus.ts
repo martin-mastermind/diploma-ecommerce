@@ -9,6 +9,14 @@ type ApplicationEvents = {
   }
   'auth:modal': boolean
   'auth:type': 'login' | 'registration'
+  'cart:update': {
+    userDelivery?: number
+    payType?: 'cash' | 'card'
+    coupon?: string | null
+    deliveryDate?: string | null
+    deliveryTimeFrom?: string | null
+    deliveryTimeTo?: string | null
+  }
 }
 
 const emitter = mitt<ApplicationEvents>()

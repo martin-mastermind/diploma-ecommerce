@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { useEvent } from '~/composables/utils/useEventBus'
+
 const userDeliveries = ref([
   {
     id: 1,
@@ -16,6 +18,15 @@ const deliveryOption = computed(() => {
   }
 })
 
+const selectedDelivery = ref<number | null>(null)
+watch(selectedDelivery, () => {
+  if (!selectedDelivery.value) { return }
+
+  useEvent('cart:update', {
+    userDelivery: selectedDelivery.value
+  })
+})
+
 const isOpened = ref(false)
 </script>
 
@@ -27,7 +38,7 @@ const isOpened = ref(false)
       </h3>
       <ClientUiIconButton name="material-symbols:add-circle-outline-rounded" @click="isOpened = true" />
     </header>
-    <select class="p-2 rounded-lg border border-blue-950">
+    <select v-model="selectedDelivery" class="p-2 rounded-lg border border-blue-950">
       <option v-for="delivery in userDeliveries" :key="delivery.id" :value="delivery.id">
         {{ deliveryOption(delivery) }}
       </option>

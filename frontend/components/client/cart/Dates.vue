@@ -1,8 +1,17 @@
 <script setup lang="ts">
+import { useEvent } from '~/composables/utils/useEventBus'
+
 const dateRef = ref<HTMLInputElement | null>()
-const deliveryDate = ref<Date | null>(null)
+const deliveryDate = ref<string | null>(null)
 function updateDate () {
-  deliveryDate.value = dateRef.value!.valueAsDate
+  deliveryDate.value = dateRef.value!.value
+
+  const cartDate = dateRef.value!.valueAsDate?.toLocaleDateString() ?? null
+  if (!cartDate) { return }
+
+  useEvent('cart:update', {
+    deliveryDate: cartDate
+  })
 }
 const dateMinMax = computed(() => {
   const min = new Date()
@@ -18,14 +27,21 @@ const dateMinMax = computed(() => {
 const fromTimeRef = ref<HTMLInputElement | null>()
 const toTimeRef = ref<HTMLInputElement | null>()
 const deliveryTime = ref<{from: string | null, to: string | null}>({
-  from: '08:00',
-  to: '20:00'
+  from: null,
+  to: null
 })
 function updateFromTime () {
   deliveryTime.value.from = fromTimeRef.value!.value
+  useEvent('cart:update', {
+    deliveryTimeFrom: deliveryTime.value.from
+  })
 }
 function updateToTime () {
   deliveryTime.value.to = toTimeRef.value!.value
+
+  useEvent('cart:update', {
+    deliveryTimeTo: deliveryTime.value.to
+  })
 }
 </script>
 

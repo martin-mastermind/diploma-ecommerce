@@ -81,7 +81,17 @@ export const useCart = defineStore('cartStore', () => {
     item.amount = amount
   }
 
-  return { cartData, cartItems, totalCartPrice, itemInCart, getCartItems, toggleCartItem, updateCartItemAmount }
+  async function orderCart (orderData: Client.OrderInfo) {
+    const result = await useApi('/api/cart/order', { goods: cartData.value, ...orderData }).post()
+
+    if (result === false) { return false }
+
+    cartData.value = []
+    cartItemsPreview.value = []
+    return true
+  }
+
+  return { cartData, cartItems, totalCartPrice, itemInCart, getCartItems, toggleCartItem, updateCartItemAmount, orderCart }
 }, {
   persist: true
 })

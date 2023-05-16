@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useOrder } from '~/composables/client/useOrder'
 import { useCart } from '~/store/client/cart'
 
 function goBack () {
@@ -6,6 +7,7 @@ function goBack () {
 }
 
 const cartStore = useCart()
+const { cannotOrder, order } = useOrder()
 
 </script>
 
@@ -34,7 +36,7 @@ const cartStore = useCart()
       <ClientCartPayTypes />
       <ClientCartDates />
       <ClientCartCoupon />
-      <button class="p-3 bg-blue-700 hover:bg-blue-800 active:bg-blue-900 text-white">
+      <button :disabled="cannotOrder" class="p-3 bg-blue-700 rounded-lg disabled:bg-blue-400 hover:bg-blue-800 active:bg-blue-900 text-white" @click="order">
         Оформить заказ
       </button>
     </section>

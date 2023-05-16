@@ -1,8 +1,14 @@
 <script setup lang="ts">
+import { useEvent } from '~/composables/utils/useEventBus'
+
 const couponRef = ref<HTMLInputElement | null>(null)
 const coupon = ref<string | null>(null)
 function updateCoupon () {
   coupon.value = couponRef.value!.value
+
+  useEvent('cart:update', {
+    coupon: coupon.value
+  })
 }
 </script>
 

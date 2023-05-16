@@ -250,5 +250,18 @@ declare global {
       price: number
       img: string
     }
+
+    interface OrderInfo {
+      userDelivery: number | null
+      payType: 'cash' | 'card'
+      coupon: string | null
+      deliveryDate: string | null
+      deliveryTimeFrom: string | null
+      deliveryTimeTo: string | null
+    }
+
+    interface OrderData extends OrderInfo {
+      goods: CartItem[]
+    }
   }
 }
