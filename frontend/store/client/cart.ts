@@ -7,13 +7,23 @@ export const useCart = defineStore('cartStore', () => {
   const cartItemsPreview = ref<Client.GoodPreview[]>([])
 
   const cartItems = computed<Client.CartListItem[]>(() => {
-    return cartItemsPreview.value.map(cp => ({
-      id: cp.id,
-      title: cp.title,
-      img: cp.img,
-      price: cp.price!,
-      amount: cartData.value.find(cd => cd.id === cp.id)?.amount ?? 0
-    }))
+    const result = []
+
+    for (const preview of cartItemsPreview.value) {
+      const data = cartData.value.find(c => c.id === preview.id)
+
+      if (data == null) { continue }
+
+      result.push({
+        id: preview.id,
+        title: preview.title,
+        img: preview.img,
+        price: preview.price!,
+        amount: data.amount
+      })
+    }
+
+    return result
   })
 
   const totalCartPrice = computed(() => {
