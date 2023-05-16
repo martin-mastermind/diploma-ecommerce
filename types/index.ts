@@ -301,5 +301,17 @@ declare global {
       delivery_to_time: string
       status: 'new' | 'in-work' | 'success' | 'canceled'
     }
+
+    interface AppealPreview {
+      id: number
+      admin?: {
+        name: string
+      }
+      status: 'new' | 'in-work' | 'closed'
+    }
+
+    interface Appeal extends AppealPreview {
+      messages: AppealMessage[]
+    }
   }
 }

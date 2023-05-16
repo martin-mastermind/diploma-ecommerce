@@ -1,13 +1,7 @@
 <script setup lang="ts">
-const appeals = ref([
-  {
-    id: 1,
-    admin: {
-      name: 'Скала Петр Иванович'
-    },
-    status: 'in-work' as 'new' | 'in-work' | 'closed'
-  }
-])
+import { useAppeals } from '~/store/client/appeals'
+
+const appealsStore = useAppeals()
 
 const appealStatus = computed(() => (status: 'new' | 'in-work' | 'closed') => {
   const statuses = {
@@ -20,19 +14,21 @@ const appealStatus = computed(() => (status: 'new' | 'in-work' | 'closed') => {
 })
 
 const isOpened = ref(false)
-const selectedAppeal = ref(0)
 
-function toggleModal (id?: number) {
-  selectedAppeal.value = id || 0
+async function toggleModal (id?: number) {
+  await appealsStore.getAppeal(id)
+
   isOpened.value = true
 }
 
-function closeAppeal (id?: number) {
+async function askClose (id?: number) {
   if (!id) { return }
 
   if (!confirm('Вы уверены?')) { return }
 
-  alert('Обращение закрыто!')
+  if (!await appealsStore.closeAppeal(id)) { return }
+
+  await appealsStore.getAppeals()
 }
 </script>
 
@@ -42,15 +38,15 @@ function closeAppeal (id?: number) {
       Обращения в тех.поддержку
     </h1>
     <section class="flex flex-col gap-2 justify-center lg:gap-10">
-      <div v-for="appeal in appeals" :key="appeal.id" class="p-5 border-b border-blue-950 flex items-center justify-between">
+      <div v-for="appeal in appealsStore.appeals" :key="appeal.id" class="p-5 border-b border-blue-950 flex items-center justify-between">
         <div class="flex gap-2 flex-col md:gap-4">
           <span class="text-lg md:text-xl font-bold">Обращение №{{ appeal.id }}</span>
-          <span class="text-sm md:text-lg">Сотрудник: <span class="font-bold">{{ appeal.admin.name || '' }}</span></span>
+          <span class="text-sm md:text-lg">Сотрудник: <span v-if="appeal.admin" class="font-bold">{{ appeal.admin.name }}</span></span>
           <span class="text-lg md:text-xl font-bold">{{ appealStatus(appeal.status) }}</span>
         </div>
         <div class="flex flex-col gap-2">
           <ClientUiIconButton name="material-symbols:open-in-new-rounded" @click="toggleModal(appeal.id)" />
-          <ClientUiIconButton v-if="appeal.status !== 'closed'" name="material-symbols:close-rounded" @click="closeAppeal(appeal.id)" />
+          <ClientUiIconButton v-if="appeal.status !== 'closed'" name="material-symbols:close-rounded" @click="askClose(appeal.id)" />
         </div>
       </div>
     </section>
@@ -58,6 +54,6 @@ function closeAppeal (id?: number) {
       Новое обращение
     </button>
 
-    <ClientProfileAppealsModal :id="selectedAppeal" v-model:is-opened="isOpened" />
+    <ClientProfileAppealsModal v-model:is-opened="isOpened" />
   </article>
 </template>
