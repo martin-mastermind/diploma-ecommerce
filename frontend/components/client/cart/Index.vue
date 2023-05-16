@@ -7,11 +7,6 @@ function goBack () {
 
 const cartStore = useCart()
 
-function changeAmount (good: Client.CartListItem, value: string) {
-  const numericValue = +value
-  good.amount = numericValue < 0 || numericValue > 10 ? 1 : numericValue
-}
-
 </script>
 
 <template>
@@ -24,7 +19,7 @@ function changeAmount (good: Client.CartListItem, value: string) {
       </h1>
     </header>
     <section v-if="cartStore.cartItems.length > 0" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-2 max-h-96 overflow-auto">
-      <ClientCartListItem v-for="good in cartStore.cartItems" :key="good.id" :good="good" @change-amount="(value: string) => changeAmount(good, value)" />
+      <ClientCartListItem v-for="good in cartStore.cartItems" :key="good.id" :good="good" />
     </section>
     <section v-else class="p-5">
       <h2 class="text-xl lg:text-2xl">

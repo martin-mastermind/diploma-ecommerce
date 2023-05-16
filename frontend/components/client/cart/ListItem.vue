@@ -1,14 +1,18 @@
 <script setup lang="ts">
-defineProps<{
+import { useCart } from '~/store/client/cart'
+
+const props = defineProps<{
   good: Client.CartListItem
 }>()
 
-const emit = defineEmits(['changeAmount'])
+const cartStore = useCart()
 
 const inputRef = ref<HTMLInputElement | null>(null)
 
 function updateAmount () {
-  emit('changeAmount', inputRef.value!.value)
+  const newAmount = +inputRef.value!.value
+
+  cartStore.updateCartItemAmount(props.good.id, newAmount ?? 1)
 }
 
 </script>
