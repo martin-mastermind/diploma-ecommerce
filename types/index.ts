@@ -240,6 +240,13 @@ declare global {
       email: string
     }
 
+    interface UserData {
+      name: string
+      phone: string
+      email: string
+      password: string
+    }
+
     interface CartItem {
       id: number
       amount: number

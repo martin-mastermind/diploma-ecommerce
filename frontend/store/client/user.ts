@@ -23,6 +23,15 @@ export const useUser = defineStore('userStore', () => {
     return true
   }
 
+  async function updateUser ({ name, email, phone, password }: Client.UserData) {
+    const result = await useApi('/api/profile', { name, email, phone, password }).put()
+
+    if (result === false) { return false }
+
+    user.value = result as Client.User
+    return true
+  }
+
   async function logoutUser () {
     const result = await useApi('/api/auth/logout').post()
 
@@ -46,7 +55,7 @@ export const useUser = defineStore('userStore', () => {
     return true
   }
 
-  return { user, loginUser, registerUser, logoutUser, isEmptyUser, verifyUser }
+  return { user, loginUser, registerUser, updateUser, logoutUser, isEmptyUser, verifyUser }
 }, {
   persist: true
 })
