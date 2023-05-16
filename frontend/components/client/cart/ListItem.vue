@@ -1,10 +1,17 @@
 <script setup lang="ts">
+import { useAuthModal } from '~/composables/client/useAuthModal'
 import { useCart } from '~/store/client/cart'
+import { useComparison } from '~/store/client/comparison'
+import { useFavourites } from '~/store/client/favourites'
 
 const props = defineProps<{
   good: Client.CartListItem
 }>()
 
+const { checkForAuth } = useAuthModal()
+const { toggleFavourite } = useFavourites()
+
+const comparisonStore = useComparison()
 const cartStore = useCart()
 
 const inputRef = ref<HTMLInputElement | null>(null)
@@ -13,6 +20,12 @@ function updateAmount () {
   const newAmount = +inputRef.value!.value
 
   cartStore.updateCartItemAmount(props.good.id, newAmount ?? 1)
+}
+
+async function checkFavourite () {
+  if (!await checkForAuth()) { return }
+
+  await toggleFavourite(props.good.id)
 }
 
 </script>
@@ -40,9 +53,9 @@ function updateAmount () {
       <NuxtLink :to="`/good/${good.id}`">
         <ClientUiIconButton name="material-symbols:open-in-new-rounded" />
       </NuxtLink>
-      <ClientUiIconButton name="material-symbols:delete-outline-rounded" />
-      <ClientUiIconButton name="material-symbols:favorite-outline-rounded" />
-      <ClientUiIconButton name="material-symbols:candlestick-chart-outline-rounded" />
+      <ClientUiIconButton name="material-symbols:delete-outline-rounded" @click="cartStore.toggleCartItem(good.id)" />
+      <ClientUiIconButton name="material-symbols:favorite-outline-rounded" @click="checkFavourite" />
+      <ClientUiIconButton name="material-symbols:candlestick-chart-outline-rounded" @click="comparisonStore.toggleComparison(good.id)" />
     </div>
   </div>
 </template>
