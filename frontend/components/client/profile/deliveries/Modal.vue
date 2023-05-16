@@ -1,29 +1,18 @@
 <script setup lang="ts">
+import { useDelivery } from '~/composables/client/useDelivery'
+
 defineProps<{
   isOpened: boolean
-  id: number
 }>()
 
-const data = ref<{
-  city: string | null
-  street: string | null
-  house: number | null
-  entrance: number | null
-  floor: number | null
-  apartment: number | null
-}>({
-  city: null,
-  street: null,
-  house: null,
-  entrance: null,
-  floor: null,
-  apartment: null
-})
+const { data, cannotSave, save } = useDelivery()
 
 const emit = defineEmits(['update:isOpened'])
 
-function saveChanges () {
-  alert('Адрес сохранен')
+async function saveChanges () {
+  if (!await save()) { return }
+
+  emit('update:isOpened', false)
 }
 </script>
 
@@ -43,9 +32,13 @@ function saveChanges () {
         <ClientUiInput v-model:value="data.entrance" label="Подъезд" type="number" placeholder="2" />
         <ClientUiInput v-model:value="data.floor" label="Этаж" type="number" placeholder="7" />
         <ClientUiInput v-model:value="data.apartment" label="Квартира" type="number" placeholder="45" />
+        <label class="w-full flex flex-col gap-1">
+          Комментарий к адресу
+          <textarea v-model="data.commentary" class="max-w-xl lg:max-w-full border border-blue-900 p-2 rounded-lg resize-none overflow-auto" cols="30" rows="10" />
+        </label>
       </article>
       <footer class="mt-auto flex w-full justify-end gap-5">
-        <button class="bg-blue-700 text-white px-5 py-3 rounded-md transition-colors disabled:bg-slate-400 hover:bg-blue-800 active:bg-blue-900" @click="saveChanges">
+        <button class="bg-blue-700 text-white px-5 py-3 rounded-md transition-colors disabled:bg-slate-400 hover:bg-blue-800 active:bg-blue-900" :disabled="cannotSave" @click="saveChanges">
           Сохранить
         </button>
       </footer>

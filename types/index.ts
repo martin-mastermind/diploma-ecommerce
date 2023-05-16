@@ -263,5 +263,19 @@ declare global {
     interface OrderData extends OrderInfo {
       goods: CartItem[]
     }
+
+    interface UserDelivery {
+      id: number
+      city: string
+      street: string
+      house: number
+      entrance: number
+      floor: number
+      apartment: number
+    }
+
+    interface UserDeliveryFull extends UserDelivery {
+      commentary: string
+    }
   }
 }

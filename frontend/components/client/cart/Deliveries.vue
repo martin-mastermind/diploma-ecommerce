@@ -1,22 +1,16 @@
 <script setup lang="ts">
 import { useEvent } from '~/composables/utils/useEventBus'
+import { useDeliveries } from '~/store/client/deliveries'
 
-const userDeliveries = ref([
-  {
-    id: 1,
-    city: 'Минск',
-    street: 'Пулихова',
-    house: 31,
-    entrance: 2,
-    floor: 7,
-    apartment: 45
-  }
-])
+const deliveriesStore = useDeliveries()
+
 const deliveryOption = computed(() => {
-  return (delivery: {id: number, city: string, street: string, house: number, entrance: number, floor: number, apartment: number}) => {
+  return (delivery: Client.UserDeliveryFull) => {
     return `г.${delivery.city}, ул.${delivery.street} ${delivery.house}, п.${delivery.entrance}, эт.${delivery.floor}, кв.${delivery.apartment}`
   }
 })
+
+onMounted(deliveriesStore.getDeliveries)
 
 const selectedDelivery = ref<number | null>(null)
 watch(selectedDelivery, () => {
@@ -28,6 +22,11 @@ watch(selectedDelivery, () => {
 })
 
 const isOpened = ref(false)
+
+function addDelivery () {
+  deliveriesStore.selectDelivery(0)
+  isOpened.value = true
+}
 </script>
 
 <template>
@@ -36,14 +35,14 @@ const isOpened = ref(false)
       <h3 class="text-xl lg:text-2xl font-bold">
         Адрес доставки
       </h3>
-      <ClientUiIconButton name="material-symbols:add-circle-outline-rounded" @click="isOpened = true" />
+      <ClientUiIconButton name="material-symbols:add-circle-outline-rounded" @click="addDelivery" />
     </header>
     <select v-model="selectedDelivery" class="p-2 rounded-lg border border-blue-950">
-      <option v-for="delivery in userDeliveries" :key="delivery.id" :value="delivery.id">
+      <option v-for="delivery in deliveriesStore.deliveries" :key="delivery.id" :value="delivery.id">
         {{ deliveryOption(delivery) }}
       </option>
     </select>
 
-    <ClientProfileDeliveriesModal :id="0" v-model:is-opened="isOpened" class="z-20" />
+    <ClientProfileDeliveriesModal v-model:is-opened="isOpened" class="z-20" />
   </section>
 </template>
