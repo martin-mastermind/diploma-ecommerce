@@ -1,15 +1,8 @@
 <script setup lang="ts">
 
-const orders = ref([
-  {
-    id: 1,
-    total: 8.5,
-    delivery_date: '14.05.2023',
-    delivery_from_time: '14:00',
-    delivery_to_time: '18:00',
-    status: 'new' as 'new' | 'in-work' | 'success' | 'canceled'
-  }
-])
+import { useOrders } from '~/store/client/orders'
+
+const ordersStore = useOrders()
 
 const orderStatus = computed(() => (status: 'new' | 'in-work' | 'success' | 'canceled') => {
   const statuses = {
@@ -22,12 +15,13 @@ const orderStatus = computed(() => (status: 'new' | 'in-work' | 'success' | 'can
   return statuses[status]
 })
 
-function cancelOrder (id?: number) {
+async function askCancel (id?: number) {
   if (!id) { return }
 
   if (!confirm('Вы уверены?')) { return }
 
-  alert('Заказ отменен!')
+  if (!await ordersStore.cancelOrder(id)) { return }
+  await ordersStore.getOrders()
 }
 </script>
 
@@ -37,7 +31,7 @@ function cancelOrder (id?: number) {
       Список заказов
     </h1>
     <section class="flex flex-col gap-2 justify-center lg:gap-10">
-      <div v-for="order in orders" :key="order.id" class="p-5 border-b border-blue-950 flex items-center justify-between">
+      <div v-for="order in ordersStore.orders" :key="order.id" class="p-5 border-b border-blue-950 flex items-center justify-between">
         <div class="flex gap-2 flex-col md:gap-4">
           <span class="text-lg md:text-xl font-bold">Заказ №{{ order.id }}</span>
           <span class="text-sm md:text-lg">Общая стоимость: {{ order.total }} р.</span>
@@ -45,7 +39,7 @@ function cancelOrder (id?: number) {
           <span class="text-lg md:text-xl font-bold">{{ orderStatus(order.status) }}</span>
         </div>
         <div v-if="order.status === 'new'" class="w-1/4 flex gap-1 justify-center">
-          <ClientUiIconButton name="material-symbols:close-rounded" @click="cancelOrder(order.id)" />
+          <ClientUiIconButton name="material-symbols:close-rounded" @click="askCancel(order.id)" />
         </div>
       </div>
     </section>

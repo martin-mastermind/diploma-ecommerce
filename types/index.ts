@@ -284,5 +284,14 @@ declare global {
     interface UserDeliveryFull extends UserDelivery {
       commentary: string
     }
+
+    interface Order {
+      id: number
+      total: number
+      delivery_date: string
+      delivery_from_time: string
+      delivery_to_time: string
+      status: 'new' | 'in-work' | 'success' | 'canceled'
+    }
   }
 }

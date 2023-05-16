@@ -7,7 +7,7 @@ export const useDeliveries = defineStore('deliveriesStore', () => {
   const currentDelivery = ref<Client.UserDeliveryFull | null>(null)
 
   async function getDeliveries () {
-    const result = await useApi('/api/profile/deliveries').get()
+    const result = await useApi('/api/profile/deliveries/list').get()
 
     if (result === false) {
       deliveries.value = []
