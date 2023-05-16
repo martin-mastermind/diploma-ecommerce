@@ -171,6 +171,14 @@ declare global {
       rules: Rule[]
     }
 
+    interface Coupon {
+      id: number
+      title: string
+      code: string
+      total_discount: number
+      rules: Rule[]
+    }
+
     interface GoodReview {
       name: string
       message: string

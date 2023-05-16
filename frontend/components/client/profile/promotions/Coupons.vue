@@ -1,20 +1,10 @@
 <script setup lang="ts">
 import { notify } from '@kyvg/vue3-notification'
+import { useCoupons } from '~/store/client/coupons'
 
-const coupons = ref([
-  {
-    id: 1,
-    title: 'Для новых пользоватей',
-    code: 'new-user',
-    total_discount: 10,
-    rules: [
-      {
-        category: 'Фрукты',
-        discount: 5
-      }
-    ]
-  }
-])
+const couponsStore = useCoupons()
+
+onMounted(couponsStore.getCoupons)
 
 async function copyCoupon (code: string) {
   await navigator.clipboard.writeText(code)
@@ -33,7 +23,7 @@ async function copyCoupon (code: string) {
       Купоны
     </h1>
     <section class="flex flex-col gap-2 justify-center lg:gap-10">
-      <div v-for="coupon in coupons" :key="coupon.id" class="p-5 border-b border-blue-950 flex items-center justify-between">
+      <div v-for="coupon in couponsStore.coupons" :key="coupon.id" class="p-5 border-b border-blue-950 flex items-center justify-between">
         <div class="flex gap-2 flex-col md:gap-4">
           <span class="text-lg md:text-xl font-bold">{{ coupon.title }}</span>
           <span class="text-sm md:text-lg">Общая скидка: <span class="font-bold">{{ coupon.total_discount }}%</span></span>
