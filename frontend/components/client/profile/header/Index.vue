@@ -1,4 +1,8 @@
 <script setup lang="ts">
+import { useUser } from '~/store/client/user'
+
+const userStore = useUser()
+
 const menuItems = computed(() => [
   {
     id: 1,
@@ -33,9 +37,20 @@ const menuItems = computed(() => [
   {
     id: 6,
     icon: 'material-symbols:logout-rounded',
-    title: 'Выйти'
+    title: 'Выйти',
+    link: '/'
   }
 ])
+
+async function checkForLogout (id: number, link: string) {
+  if (id === 6) {
+    await userStore.logoutUser()
+    location.href = '/'
+    return
+  }
+
+  await navigateTo(link)
+}
 </script>
 
 <template>
@@ -48,6 +63,7 @@ const menuItems = computed(() => [
         :icon="item.icon"
         :title="item.title"
         :link="item.link"
+        @click="checkForLogout(item.id, item.link)"
       />
     </nav>
   </header>
