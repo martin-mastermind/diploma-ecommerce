@@ -40,9 +40,12 @@ export const useCart = defineStore('cartStore', () => {
   }
 
   async function getCartItems () {
-    if (cartData.value.length === 0) { return false }
+    if (cartData.value.length === 0) {
+      cartItemsPreview.value = []
+      return false
+    }
 
-    const result = await useApi('/api/cart/list', { ids: cartData.value.map(c => c.id) }).get()
+    const result = await useApi('/api/cart/list', { ids: JSON.stringify(cartData.value.map(c => c.id)) }).get()
 
     if (result === false) {
       cartItemsPreview.value = []
@@ -78,7 +81,7 @@ export const useCart = defineStore('cartStore', () => {
     item.amount = amount
   }
 
-  return { cartItems, totalCartPrice, itemInCart, getCartItems, toggleCartItem, updateCartItemAmount }
+  return { cartData, cartItems, totalCartPrice, itemInCart, getCartItems, toggleCartItem, updateCartItemAmount }
 }, {
   persist: true
 })

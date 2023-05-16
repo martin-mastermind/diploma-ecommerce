@@ -5,6 +5,7 @@ export default defineNuxtConfig({
   tailwindcss: {
     exposeConfig: true
   },
+  ssr: false,
   modules: [
     '@nuxtjs/eslint-module',
     '@nuxtjs/tailwindcss',

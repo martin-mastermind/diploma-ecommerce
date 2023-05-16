@@ -7,9 +7,12 @@ export const useComparison = defineStore('comparisonStore', () => {
   const comparison = ref<Client.Comparison[]>([])
 
   async function getComparison () {
-    if (comparisonIds.value.length === 0) { return false }
+    if (comparisonIds.value.length === 0) {
+      comparison.value = []
+      return false
+    }
 
-    const result = await useApi('/api/comparison/list', { ids: comparisonIds.value }).get()
+    const result = await useApi('/api/comparison/list', { ids: JSON.stringify(comparisonIds.value) }).get()
 
     if (result === false) {
       comparison.value = []

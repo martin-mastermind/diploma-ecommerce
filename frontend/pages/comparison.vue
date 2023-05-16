@@ -4,7 +4,6 @@ import { useComparison } from '~/store/client/comparison'
 const { getComparison } = useComparison()
 
 onMounted(getComparison)
-onServerPrefetch(getComparison)
 </script>
 
 <template>
