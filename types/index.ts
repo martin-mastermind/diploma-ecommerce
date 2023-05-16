@@ -239,5 +239,16 @@ declare global {
       phone: string
       email: string
     }
+
+    interface CartItem {
+      id: number
+      amount: number
+    }
+
+    interface CartListItem extends CartItem {
+      title: string
+      price: number
+      img: string
+    }
   }
 }

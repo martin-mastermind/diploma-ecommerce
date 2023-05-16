@@ -1,7 +1,7 @@
-import { isValidToken } from '~~/backend/utils/clientToken'
+import { clientIsValidToken } from '~~/backend/utils/clientToken'
 
 export default defineEventHandler((event) => {
-  if (!isValidToken(getCookie(event, 'token'))) {
+  if (!clientIsValidToken(getCookie(event, 'token'))) {
     throw createError({
       statusCode: 403,
       message: 'Пользователь не авторизован'

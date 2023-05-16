@@ -33,6 +33,6 @@ const isOpened = ref(false)
       </option>
     </select>
 
-    <ClientProfileDeliveriesModal :id="0" v-model:is-opened="isOpened" />
+    <ClientProfileDeliveriesModal :id="0" v-model:is-opened="isOpened" class="z-20" />
   </section>
 </template>

@@ -2,6 +2,7 @@
 import { useComparison } from '~/store/client/comparison'
 import { useAuthModal } from '~/composables/client/useAuthModal'
 import { useFavourites } from '~/store/client/favourites'
+import { useCart } from '~/store/client/cart'
 
 const { checkForAuth } = useAuthModal()
 const { toggleFavourite } = useFavourites()
@@ -12,6 +13,13 @@ const props = defineProps<{
 }>()
 
 const comparisonStore = useComparison()
+const cartStore = useCart()
+
+async function checkCart () {
+  if (!await checkForAuth()) { return }
+
+  cartStore.toggleCartItem(props.good.id)
+}
 
 async function checkFavourite () {
   if (!await checkForAuth()) { return }
@@ -30,8 +38,8 @@ async function checkFavourite () {
     <span v-if="good.price" class="text-blue-900 text-md font-bold">{{ good.price }} р.</span>
     <span class="text-lg font-bold">{{ good.title }}</span>
     <div class="flex gap-3 items-center">
-      <ClientUiIconButton v-if="needAddButton" name="material-symbols:shopping-cart-outline-rounded" />
-      <ClientUiIconButton name="material-symbols:favorite-outline-rounded" @click="checkFavourite" />
+      <ClientUiIconButton v-if="needAddButton" name="material-symbols:shopping-cart-outline-rounded" @click.stop="checkCart" />
+      <ClientUiIconButton name="material-symbols:favorite-outline-rounded" @click.stop="checkFavourite" />
       <ClientUiIconButton name="material-symbols:candlestick-chart-outline-rounded" @click.stop="comparisonStore.toggleComparison(good.id)" />
     </div>
   </div>

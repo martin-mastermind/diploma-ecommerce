@@ -1,5 +1,10 @@
 <script setup lang="ts">
+import { useCart } from '~/store/client/cart'
 
+const { getCartItems } = useCart()
+
+onMounted(getCartItems)
+onServerPrefetch(getCartItems)
 </script>
 
 <template>

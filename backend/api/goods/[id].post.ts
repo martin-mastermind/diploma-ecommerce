@@ -1,4 +1,4 @@
-import { generateToken, isValidToken, getInfoFromToken } from '~~/backend/utils/clientToken'
+import { clientGenerateToken, clientIsValidToken, clientGetInfoFromToken } from '~~/backend/utils/clientToken'
 
 export default defineEventHandler(async (event) => {
   const id = event.context.params?.id
@@ -10,15 +10,15 @@ export default defineEventHandler(async (event) => {
   }
 
   const token = getCookie(event, 'token')
-  if (!isValidToken(token)) {
+  if (!clientIsValidToken(token)) {
     throw createError({
       statusCode: 403,
       message: 'Пользователь не авторизован'
     })
   }
-  const tokenInfo = getInfoFromToken(token!)
+  const tokenInfo = clientGetInfoFromToken(token!)
 
-  setCookie(event, 'token', generateToken(tokenInfo!.id))
+  setCookie(event, 'token', clientGenerateToken(tokenInfo!.id))
 
   const body = await readBody<{ rating?: string, message?: string }>(event)
 

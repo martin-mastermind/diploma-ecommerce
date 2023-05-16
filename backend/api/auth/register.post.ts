@@ -1,6 +1,6 @@
 import { createHash } from 'crypto'
 
-import { generateToken, isValidToken } from '~~/backend/utils/clientToken'
+import { clientGenerateToken, clientIsValidToken } from '~~/backend/utils/clientToken'
 
 export default defineEventHandler(async (event) => {
   const body = await readBody<{ name?: string, phone?: string, email?: string, password?: string }>(event)
@@ -15,7 +15,7 @@ export default defineEventHandler(async (event) => {
     }
   }
 
-  if (isValidToken(getCookie(event, 'token'))) {
+  if (clientIsValidToken(getCookie(event, 'token'))) {
     throw createError({
       statusCode: 403,
       message: 'Пользователь уже авторизован'
@@ -52,7 +52,7 @@ export default defineEventHandler(async (event) => {
     password: hashedPassword
   }
 
-  setCookie(event, 'token', generateToken(newUser.id))
+  setCookie(event, 'token', clientGenerateToken(newUser.id))
 
   return {
     id: newUser.id,

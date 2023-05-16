@@ -1,10 +1,10 @@
-import { generateToken, isValidToken, getInfoFromToken } from '~~/backend/utils/clientToken'
+import { clientGenerateToken, clientIsValidToken, clientGetInfoFromToken } from '~~/backend/utils/clientToken'
 
 export default defineEventHandler((event) => {
   const query = getQuery(event)
   const token = getCookie(event, 'token')
 
-  if (!isValidToken(token)) {
+  if (!clientIsValidToken(token)) {
     return false
   }
 
@@ -17,7 +17,7 @@ export default defineEventHandler((event) => {
     }
   ]
 
-  const tokenUserId = getInfoFromToken(token!)!.id
+  const tokenUserId = clientGetInfoFromToken(token!)!.id
   const queryUserId = query.id?.toString() ?? ''
 
   if (!isNaN(parseInt(queryUserId)) && tokenUserId !== +queryUserId) {
@@ -32,7 +32,7 @@ export default defineEventHandler((event) => {
     return false
   }
 
-  setCookie(event, 'token', generateToken(user.id))
+  setCookie(event, 'token', clientGenerateToken(user.id))
 
   return {
     id: user.id,

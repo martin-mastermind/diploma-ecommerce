@@ -1,6 +1,6 @@
 <script setup lang="ts">
 defineProps<{
-  good: {id: number, title: string, price: number, img: string, amount: number}
+  good: Client.CartListItem
 }>()
 
 const emit = defineEmits(['changeAmount'])

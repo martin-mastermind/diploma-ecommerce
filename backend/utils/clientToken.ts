@@ -2,14 +2,14 @@ import { JWT } from './JWT'
 
 const jwt = new JWT('client', 'client-token')
 
-export function generateToken (userId: number) {
+export function clientGenerateToken (userId: number) {
   return jwt.generateToken(userId)
 }
 
-export function isValidToken (token: string | undefined) {
+export function clientIsValidToken (token: string | undefined) {
   return jwt.isValidToken(token)
 }
 
-export function getInfoFromToken (token: string) {
+export function clientGetInfoFromToken (token: string) {
   return jwt.getInfoFromToken(token)
 }
