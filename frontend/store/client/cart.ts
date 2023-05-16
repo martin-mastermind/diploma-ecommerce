@@ -12,7 +12,7 @@ export const useCart = defineStore('cartStore', () => {
       title: cp.title,
       img: cp.img,
       price: cp.price!,
-      amount: cartData.value.find(cd => cd.id === cp.id)!.amount
+      amount: cartData.value.find(cd => cd.id === cp.id)?.amount ?? 0
     }))
   })
 
