@@ -60,6 +60,11 @@ export const useCart = defineStore('cartStore', () => {
     const item = cartData.value.find(c => c.id === id)
 
     if (item == null) { return }
+    if (amount === 0) {
+      toggleCartItem(id)
+      return
+    }
+
     item.amount = amount
   }
 
