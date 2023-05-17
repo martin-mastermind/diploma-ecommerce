@@ -1,6 +1,8 @@
+import * as pg from 'pg'
 import { clientGenerateToken, clientIsValidToken, clientGetInfoFromToken } from '~~/backend/utils/clientToken'
+const { Pool } = pg.default
 
-export default defineEventHandler((event) => {
+export default defineEventHandler(async (event) => {
   const id = event.context.params?.id
   if (id === undefined) {
     throw createError({
@@ -20,7 +22,9 @@ export default defineEventHandler((event) => {
 
   setCookie(event, 'token', clientGenerateToken(tokenInfo!.id))
 
-  // Отменить заказ
+  const pool = new Pool()
+  await pool.query('UPDATE "Orders" SET status = \'canceled\' WHERE user_id = $1 AND id = $2 AND status = \'new\' ', [tokenInfo!.id, +id])
+  await pool.end()
 
   return true
 })

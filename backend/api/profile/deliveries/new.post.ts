@@ -31,6 +31,7 @@ export default defineEventHandler(async (event) => {
     INSERT INTO "User_Deliveries"(user_id, city, street, house, entrance, floor, apartment, commentary)
     VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
   `, [tokenInfo!.id, body.city, body.street, body.house, body.entrance, body.floor, body.apartment, body.commentary])
+  await pool.end()
 
   return true
 })

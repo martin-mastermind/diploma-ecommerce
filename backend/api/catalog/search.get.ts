@@ -16,7 +16,7 @@ export default defineEventHandler(async (event) => {
   const pool = new Pool()
 
   const goodsSQL = await pool.query(`
-    SELECT i.id, title, img, price, AVG(score) total, COUNT(score) total_reviews 
+    SELECT i.id, title, img, price, COALESCE(AVG(score),0) total, COALESCE(COUNT(score),0) total_reviews 
     FROM "Items" i
     JOIN "Item_Reviews" ir ON ir.item_id = i.id
     WHERE position($1 in title) > 0 AND i.amount > 0

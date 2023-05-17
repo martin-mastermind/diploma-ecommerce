@@ -43,7 +43,7 @@ export default defineEventHandler(async (event) => {
   await pool.query('INSERT INTO "Item_Reviews"(user_id, item_id, score, commentary) VALUES($1, $2, $3, $4)', [tokenInfo!.id, +id, body.rating, body.message])
 
   const goodSQL = await pool.query(`
-    SELECT i.*, AVG(score) total, COUNT(score) total_reviews
+    SELECT i.*, COALESCE(AVG(score),0) total, COALESCE(COUNT(score),0) total_reviews 
     FROM "Items" i
     JOIN "Item_Reviews" ir ON ir.item_id = i.id
     WHERE i.id = $1 AND i.amount > 0

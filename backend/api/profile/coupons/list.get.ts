@@ -33,5 +33,7 @@ export default defineEventHandler(async (event) => {
     })
   }
 
+  await pool.end()
+
   return coupons
 })

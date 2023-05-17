@@ -39,6 +39,7 @@ export default defineEventHandler(async (event) => {
     UPDATE "User_Deliveries" SET city = $3, street = $4, house = $5, entrance = $6, floor = $7, apartment = $8, commentary = $9
     WHERE id = $1 AND user_id = $2
   `, [+id, tokenInfo!.id, body.city, body.street, body.house, body.entrance, body.floor, body.apartment, body.commentary])
+  await pool.end()
 
   return true
 })

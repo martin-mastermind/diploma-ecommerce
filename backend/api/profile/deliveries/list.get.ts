@@ -16,6 +16,7 @@ export default defineEventHandler(async (event) => {
 
   const pool = new Pool()
   const deliveriesSQL = await pool.query('SELECT * FROM "User_Deliveries" WHERE user_id = $1', [tokenInfo!.id])
+  await pool.end()
 
   return deliveriesSQL.rows
 })

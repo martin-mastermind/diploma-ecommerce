@@ -24,6 +24,7 @@ export default defineEventHandler(async (event) => {
 
   const pool = new Pool()
   await pool.query('DELETE FROM "User_Deliveries" WHERE id = $1 AND user_id = $2', [+id, tokenInfo!.id])
+  await pool.end()
 
   return true
 })
