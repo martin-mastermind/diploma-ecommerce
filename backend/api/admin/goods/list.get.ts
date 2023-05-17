@@ -1,6 +1,9 @@
+import * as pg from 'pg'
 import { generateToken, isValidToken, getInfoFromToken } from '~~/backend/utils/adminToken'
 
-export default defineEventHandler((event) => {
+const { Pool } = pg.default
+
+export default defineEventHandler(async (event) => {
   const token = getCookie(event, 'token')
   if (!isValidToken(token)) {
     throw createError({
@@ -10,18 +13,10 @@ export default defineEventHandler((event) => {
   }
   setCookie(event, 'token', generateToken(getInfoFromToken(token!)!.id))
 
-  const mockGoods = [
-    {
-      id: 1,
-      vendor_code: 'A-1000',
-      title: 'Банан'
-    },
-    {
-      id: 2,
-      vendor_code: 'G-1001',
-      title: 'Яблоко'
-    }
-  ]
+  const pool = new Pool()
+  const goodsSql = await pool.query('SELECT id, title, vendor_code FROM "Items"')
 
-  return mockGoods
+  await pool.end()
+
+  return goodsSql.row
 })
