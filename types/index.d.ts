@@ -1,4 +1,4 @@
-export { }
+declare module 'pg'
 
 declare global {
   interface AdminUser {
