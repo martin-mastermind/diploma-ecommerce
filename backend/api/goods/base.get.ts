@@ -1,26 +1,28 @@
-export default defineEventHandler(() => {
-  const mockGoods = [
-    {
-      id: 1,
-      title: 'Банан',
-      img: 'https://cs8.pikabu.ru/post_img/big/2016/04/21/5/1461224935173673.jpg',
-      price: 2.5,
-      rating: {
-        total: 4.5,
-        total_reviews: 2
-      }
-    },
-    {
-      id: 2,
-      title: 'Яблоко',
-      img: '',
-      price: 1.89,
-      rating: {
-        total: 0,
-        total_reviews: 0
-      }
-    }
-  ]
+import * as pg from 'pg'
+const { Pool } = pg.default
 
-  return mockGoods
+export default defineEventHandler(async () => {
+  const pool = new Pool()
+
+  const goodsSQL = await pool.query(`
+    SELECT i.id, title, img, price, AVG(score) total, COUNT(score) total_reviews 
+    FROM "Items" i
+    JOIN "Item_Reviews" ir ON ir.item_id = i.id
+    GROUP BY i.id
+  `)
+
+  await pool.end()
+
+  const goods = goodsSQL.rows.map((g: { id: number, title: string, img: string, price: number, total: number, total_reviews: number }) => ({
+    id: g.id,
+    title: g.title,
+    img: g.img,
+    price: g.price,
+    rating: {
+      total: g.total,
+      total_reviews: g.total_reviews
+    }
+  }))
+
+  return goods
 })

@@ -24,7 +24,7 @@ export default defineEventHandler(async (event) => {
   const rulesSQL = await pool.query(`
     SELECT c.title category, pr.discount 
     FROM "Promotion_Rules" pr 
-    LEFT JOIN "Categories" c ON pr.category_id = c.id 
+    JOIN "Categories" c ON pr.category_id = c.id 
     WHERE promotion_id = $1
   `, [+id])
 
