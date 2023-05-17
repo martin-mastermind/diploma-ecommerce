@@ -1,6 +1,17 @@
+import * as pg from 'pg'
 import { generateToken, isValidToken, getInfoFromToken } from '~~/backend/utils/adminToken'
 
-export default defineEventHandler((event) => {
+const { Pool } = pg.default
+
+export default defineEventHandler(async (event) => {
+  const id = event.context.params?.id
+  if (id === undefined) {
+    throw createError({
+      statusCode: 400,
+      message: 'Не указан id категории'
+    })
+  }
+
   const token = getCookie(event, 'token')
   if (!isValidToken(token)) {
     throw createError({
@@ -10,40 +21,17 @@ export default defineEventHandler((event) => {
   }
   setCookie(event, 'token', generateToken(getInfoFromToken(token!)!.id))
 
-  const id = event.context.params?.id
-  if (id === undefined) {
-    throw createError({
-      statusCode: 400,
-      message: 'Не указан id категории'
-    })
-  }
+  const pool = new Pool()
+  const categorySQL = await pool.query('SELECT * FROM "Categories" WHERE id = $1', [+id])
 
-  const mockCategories = [
-    {
-      id: 1,
-      title: 'Фрукты',
-      parent_category_id: null
-    },
-    {
-      id: 2,
-      title: 'Молочные продукты',
-      parent_category_id: null
-    },
-    {
-      id: 3,
-      title: 'Йогурты',
-      parent_category_id: 2
-    }
-  ]
+  await pool.end()
 
-  const category = mockCategories.find(c => c.id === +id)
-
-  if (category == null) {
+  if (categorySQL.row.length === 0) {
     throw createError({
       statusCode: 400,
       message: 'Не удалось найти категорию'
     })
   }
 
-  return category
+  return categorySQL.row[0]
 })

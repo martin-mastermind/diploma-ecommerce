@@ -1,6 +1,17 @@
+import * as pg from 'pg'
 import { generateToken, isValidToken, getInfoFromToken } from '~~/backend/utils/adminToken'
 
-export default defineEventHandler((event) => {
+const { Pool } = pg.default
+
+export default defineEventHandler(async (event) => {
+  const id = event.context.params?.id
+  if (id === undefined) {
+    throw createError({
+      statusCode: 400,
+      message: 'Не указан id категории'
+    })
+  }
+
   const token = getCookie(event, 'token')
   if (!isValidToken(token)) {
     throw createError({
@@ -10,15 +21,10 @@ export default defineEventHandler((event) => {
   }
   setCookie(event, 'token', generateToken(getInfoFromToken(token!)!.id))
 
-  const id = event.context.params?.id
-  if (id === undefined) {
-    throw createError({
-      statusCode: 400,
-      message: 'Не указан id категории'
-    })
-  }
+  const pool = new Pool()
+  await pool.query('DELETE FROM "Categories" WHERE id = $1', [+id])
 
-  // Удалить запись по ID в БД
+  await pool.end()
 
   return true
 })

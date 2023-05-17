@@ -1,4 +1,7 @@
+import * as pg from 'pg'
 import { generateToken, isValidToken, getInfoFromToken } from '~~/backend/utils/adminToken'
+
+const { Pool } = pg.default
 
 export default defineEventHandler(async (event) => {
   const token = getCookie(event, 'token')
@@ -22,7 +25,10 @@ export default defineEventHandler(async (event) => {
     }
   }
 
-  // Добавить запись в БД
+  const pool = new Pool()
+  await pool.query('INSERT INTO "Categories"(title, parent_category_id) VALUES ($1, $2)', [body.title, body.parent_category_id])
+
+  await pool.end()
 
   return true
 })
