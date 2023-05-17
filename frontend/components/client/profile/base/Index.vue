@@ -12,7 +12,7 @@ const { data } = useProfile()
     <section class="flex flex-col gap-6 lg:flex-row lg:flex-wrap lg:justify-center">
       <ClientProfileBaseField v-model:value="data.name" label="Имя" placeholder="Иван" type="text" />
       <ClientProfileBaseField v-model:value="data.email" label="Email" placeholder="test@email.com" type="email" />
-      <ClientProfileBaseField v-model:value="data.phone" label="Номер телефона" placeholder="+375257075176" type="tel" />
+      <ClientProfileBaseField v-model:value="data.phone" label="Номер телефона" placeholder="375257075176" type="tel" />
       <ClientProfileBaseField v-model:value="data.password" label="Пароль" placeholder="**********" type="password" />
     </section>
   </article>

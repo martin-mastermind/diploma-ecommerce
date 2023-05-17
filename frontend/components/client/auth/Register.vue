@@ -17,7 +17,7 @@ const { data, cannotRegister, register } = useRegister()
     <article class="flex flex-col gap-5">
       <ClientUiInput v-model:value="data.name" class="lg:w-full" label="Имя" placeholder="Иван" type="text" />
       <ClientUiInput v-model:value="data.email" class="lg:w-full" label="Email" placeholder="test@email.com" type="email" />
-      <ClientUiInput v-model:value="data.phone" class="lg:w-full" label="Номер телефона" placeholder="+375257075176" type="tel" />
+      <ClientUiInput v-model:value="data.phone" class="lg:w-full" label="Номер телефона" placeholder="375257075176" type="tel" />
       <ClientUiInput v-model:value="data.password" class="lg:w-full" label="Пароль" placeholder="**********" type="password" />
     </article>
     <footer class="mt-auto flex flex-col md:flex-row w-full justify-end gap-5">
