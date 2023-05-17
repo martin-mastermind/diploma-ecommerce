@@ -21,7 +21,7 @@ export default defineEventHandler(async (event) => {
 
   const pool = new Pool()
 
-  const userSQL = await pool.query('SELECT id, last_name, first_name, patronymic, type FROM "Administrators WHERE id = $1', [tokenUserId])
+  const userSQL = await pool.query('SELECT id, last_name, first_name, patronymic, type FROM "Administrators" WHERE id = $1', [tokenUserId])
   if (userSQL.rows.length === 0) {
     await pool.end()
     deleteCookie(event, 'token')
