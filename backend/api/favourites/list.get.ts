@@ -19,7 +19,7 @@ export default defineEventHandler(async (event) => {
   const goodsSQL = await pool.query(`
     SELECT i.id, title, img, price, AVG(score) total, COUNT(score) total_reviews 
     FROM "Items" i
-    JOIN "Item_Reviews" ir ON ir.item_id = i.id
+    LEFT JOIN "Item_Reviews" ir ON ir.item_id = i.id
     JOIN "User_Favourite_Items" ufi ON ufi.item_id = i.id
     WHERE ufi.user_id = $1
     GROUP BY i.id
