@@ -1,6 +1,9 @@
 import { createHash } from 'crypto'
 
+import * as pg from 'pg'
 import { generateToken, isValidToken } from '~~/backend/utils/adminToken'
+
+const { Pool } = pg.default
 
 export default defineEventHandler(async (event) => {
   const body = await readBody<{ id?: number, password?: string }>(event)
@@ -26,26 +29,21 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  const mockUsers = [
-    {
-      id: 1,
-      last_name: 'Mock',
-      first_name: 'User',
-      patronymic: null,
-      type: 'full',
-      password: 'daf6e3fa8a4a42748c389b4caffb0a7b6bc7de3bb981e20370d7a92acc595b37'
-    }
-  ]
-
   const hashedPassword = createHash('sha256').update(body.password).digest('hex')
-  const user = mockUsers.find(u => u.id === body.id && u.password === hashedPassword)
+  const pool = new Pool()
 
-  if (user == null) {
+  const userSQL = await pool.query('SELECT id, last_name, first_name, patronymic, type FROM "Administrators" WHERE id = $1 AND password = $2', [body.id, hashedPassword])
+  if (userSQL.rows.length === 0) {
+    await pool.end()
     throw createError({
       statusCode: 400,
-      message: 'Не найден пользователь с такими данными'
+      message: 'Пользователя с такими данными не существует'
     })
   }
+
+  await pool.end()
+
+  const user = userSQL.rows[0]
 
   setCookie(event, 'token', generateToken(user.id))
 
