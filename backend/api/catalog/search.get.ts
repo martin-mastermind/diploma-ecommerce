@@ -1,4 +1,7 @@
-export default defineEventHandler((event) => {
+import * as pg from 'pg'
+const { Pool } = pg.default
+
+export default defineEventHandler(async (event) => {
   const body = getQuery(event)
 
   if (body.slug == null) {
@@ -10,44 +13,30 @@ export default defineEventHandler((event) => {
 
   const slug = body.slug as string
 
-  const mockCatalog = [
-    {
-      id: 1,
-      title: 'Фрукты и овощи',
-      goods: [
-        {
-          id: 1,
-          title: 'Банан',
-          img: 'https://cs8.pikabu.ru/post_img/big/2016/04/21/5/1461224935173673.jpg',
-          price: 2.5,
-          rating: {
-            total: 4.5,
-            total_reviews: 2
-          }
-        },
-        {
-          id: 2,
-          title: 'Яблоко',
-          img: '',
-          price: 1.89,
-          rating: {
-            total: 0,
-            total_reviews: 0
-          }
-        }
-      ]
+  const pool = new Pool()
 
-    }
-  ]
+  const goodsSQL = await pool.query(`
+    SELECT i.id, title, img, price, AVG(score) total, COUNT(score) total_reviews 
+    FROM "Items" i
+    JOIN "Item_Reviews" ir ON ir.item_id = i.id
+    WHERE position($1 in title) > 0
+    GROUP BY i.id
+  `, [slug])
 
-  const catalog = mockCatalog.find(c => c.goods.some(g => g.title.includes(slug)))
+  await pool.end()
 
-  if (catalog == null) {
-    throw createError({
-      statusCode: 400,
-      message: 'Не удалось найти товары'
-    })
+  return {
+    id: 0,
+    title: 'Результаты поиска',
+    goods: goodsSQL.rows.map((g: { id: number, title: string, img: string, price: number, total: number, total_reviews: number }) => ({
+      id: g.id,
+      title: g.title,
+      img: g.img,
+      price: g.price,
+      rating: {
+        total: g.total,
+        total_reviews: g.total_reviews
+      }
+    }))
   }
-
-  return catalog
 })

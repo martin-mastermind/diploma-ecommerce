@@ -1,25 +1,22 @@
-export default defineEventHandler(() => {
-  const mockCategories = [
-    {
-      id: 1,
-      title: 'Фрукты и овощи',
-      children: [
-        {
-          id: 10,
-          title: 'Фрукты'
-        },
-        {
-          id: 11,
-          title: 'Овощи'
-        }
-      ]
-    },
-    {
-      id: 2,
-      title: 'Молочные продукты',
-      children: []
-    }
-  ]
+import * as pg from 'pg'
+const { Pool } = pg.default
 
-  return mockCategories
+export default defineEventHandler(async () => {
+  const pool = new Pool()
+
+  const categoriesSQL = await pool.query('SELECT id, title FROM "Categories"')
+
+  categoriesSQL.rows.map(async (c: { id: number, title: string }) => {
+    const childSQL = await pool.query('SELECT id, title FROM "Categories" WHERE parent_category_id = $1', [c.id])
+
+    return {
+      id: c.id,
+      title: c.title,
+      children: childSQL.rows
+    }
+  })
+
+  await pool.end()
+
+  return categoriesSQL.rows
 })
