@@ -1,4 +1,6 @@
+import * as pg from 'pg'
 import { clientGenerateToken, clientIsValidToken, clientGetInfoFromToken } from '~~/backend/utils/clientToken'
+const { Pool } = pg.default
 
 export default defineEventHandler(async (event) => {
   const id = event.context.params?.id
@@ -28,63 +30,43 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  // Если id === 0 => добавить новое обращение и в него сообщение
-  // Иначе => добавить сообщение в обращение
+  const pool = new Pool()
+  let appealId = +id
+  if (appealId === 0) {
+    const appealSQL = await pool.query('INSERT INTO "Appeals"(user_id) VALUES ($1) RETURNING id', [tokenInfo!.id])
+    if (appealSQL.rows.length === 0) {
+      throw createError({
+        statusCode: 400,
+        message: 'Не удалось создать обращение'
+      })
+    }
 
-  const mockAppeal = {
-    id: 1,
-    admin: {
-      name: 'Скала Петр Иванович'
-    },
-    status: 'in-work',
-    messages: [
-      {
-        from_admin: false,
-        sent_time: '14.05.2023 15:41',
-        message: 'Здавствуйте! У меня проблема'
-      },
-      {
-        from_admin: true,
-        sent_time: '14.05.2023 15:42',
-        message: 'Здавствуйте! Что случилось?'
-      },
-      {
-        from_admin: false,
-        sent_time: '14.05.2023 15:41',
-        message: 'Здавствуйте! У меня проблема'
-      },
-      {
-        from_admin: true,
-        sent_time: '14.05.2023 15:42',
-        message: 'Здавствуйте! Что случилось?'
-      },
-      {
-        from_admin: false,
-        sent_time: '14.05.2023 15:41',
-        message: 'Здавствуйте! У меня проблема'
-      },
-      {
-        from_admin: true,
-        sent_time: '14.05.2023 15:42',
-        message: 'Здавствуйте! Что случилось?'
-      },
-      {
-        from_admin: false,
-        sent_time: '14.05.2023 15:41',
-        message: 'Здавствуйте! У меня проблема'
-      },
-      {
-        from_admin: true,
-        sent_time: '14.05.2023 15:42',
-        message: 'Здавствуйте! Что случилось?'
-      },
-      {
-        from_admin: false,
-        sent_time: '16.05.2023 17:21',
-        message: body.text
-      }
-    ]
+    appealId = +appealSQL.rows[0].id
   }
 
-  return mockAppeal
+  await pool.query('INSERT INTO "Appeal_Messages"(from_admin, message) VALUES (\'false\', $1)', [body.text])
+
+  const appealSQL = await pool.query(`
+    SELECT a.id, CONCAT(adm.last_name, ' ', adm.first_name, ' ', adm.patronymic) admin_name, a.status 
+    FROM "Appeals" a
+    JOIN "Administrators" adm ON a.admin_id = adm.id
+    WHERE id = $1 AND user_id = $2
+  `, [appealId, tokenInfo!.id])
+  if (appealSQL.rows.length === 0) {
+    throw createError({
+      statusCode: 400,
+      message: 'Не удалось найти обращение'
+    })
+  }
+
+  const appeal = appealSQL.rows[0]
+
+  const messagesSQL = await pool.query('SELECT from_admin, sent_time, message FROM "Appeal_Messages" WHERE appeal_id = $1', [appeal.id])
+
+  await pool.end()
+
+  return {
+    ...appeal,
+    messages: messagesSQL.rows
+  }
 })

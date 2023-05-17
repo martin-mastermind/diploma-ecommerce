@@ -1,6 +1,8 @@
+import * as pg from 'pg'
 import { clientGenerateToken, clientIsValidToken, clientGetInfoFromToken } from '~~/backend/utils/clientToken'
+const { Pool } = pg.default
 
-export default defineEventHandler((event) => {
+export default defineEventHandler(async (event) => {
   const token = getCookie(event, 'token')
   if (!clientIsValidToken(token)) {
     throw createError({
@@ -12,15 +14,25 @@ export default defineEventHandler((event) => {
 
   setCookie(event, 'token', clientGenerateToken(tokenInfo!.id))
 
-  const mockAppeals = [
-    {
-      id: 1,
-      admin: {
-        name: 'Скала Петр Иванович'
-      },
-      status: 'in-work' as 'new' | 'in-work' | 'closed'
-    }
-  ]
+  const pool = new Pool()
+  const appealsSQL = await pool.query(`
+    SELECT a.id, CONCAT(adm.last_name, ' ', adm.first_name, ' ', adm.patronymic) admin_name, a.status 
+    FROM "Appeals" a
+    JOIN "Administrators" adm ON a.admin_id = adm.id
+    WHERE user_id = $1
+  `, [tokenInfo!.id])
+  await pool.end()
 
-  return mockAppeals
+  const appeals = []
+  for (const appeal of appealsSQL.rows) {
+    appeals.push({
+      id: appeal.id,
+      admin: {
+        name: appeal.admin_name
+      },
+      status: appeal.status
+    })
+  }
+
+  return appeals
 })
