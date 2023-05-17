@@ -1,6 +1,8 @@
+import * as pg from 'pg'
 import { clientGenerateToken, clientIsValidToken, clientGetInfoFromToken } from '~~/backend/utils/clientToken'
+const { Pool } = pg.default
 
-export default defineEventHandler((event) => {
+export default defineEventHandler(async (event) => {
   const id = event.context.params?.id
   if (id === undefined) {
     throw createError({
@@ -20,7 +22,8 @@ export default defineEventHandler((event) => {
 
   setCookie(event, 'token', clientGenerateToken(tokenInfo!.id))
 
-  // Удалить адрес
+  const pool = new Pool()
+  await pool.query('DELETE FROM "User_Deliveries" WHERE id = $1 AND user_id = $2', [+id, tokenInfo!.id])
 
   return true
 })

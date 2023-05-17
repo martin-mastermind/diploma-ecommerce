@@ -1,14 +1,8 @@
+import * as pg from 'pg'
 import { clientGenerateToken, clientIsValidToken, clientGetInfoFromToken } from '~~/backend/utils/clientToken'
+const { Pool } = pg.default
 
 export default defineEventHandler(async (event) => {
-  const id = event.context.params?.id
-  if (id === undefined) {
-    throw createError({
-      statusCode: 400,
-      message: 'Не указан id адреса'
-    })
-  }
-
   const token = getCookie(event, 'token')
   if (!clientIsValidToken(token)) {
     throw createError({
@@ -32,7 +26,11 @@ export default defineEventHandler(async (event) => {
     }
   }
 
-  // Добавить новую запись об адресе
+  const pool = new Pool()
+  await pool.query(`
+    INSERT INTO "User_Deliveries"(user_id, city, street, house, entrance, floor, apartment, commentary)
+    VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+  `, [tokenInfo!.id, body.city, body.street, body.house, body.entrance, body.floor, body.apartment, body.commentary])
 
   return true
 })

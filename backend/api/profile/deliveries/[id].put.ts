@@ -1,4 +1,6 @@
+import * as pg from 'pg'
 import { clientGenerateToken, clientIsValidToken, clientGetInfoFromToken } from '~~/backend/utils/clientToken'
+const { Pool } = pg.default
 
 export default defineEventHandler(async (event) => {
   const id = event.context.params?.id
@@ -32,7 +34,11 @@ export default defineEventHandler(async (event) => {
     }
   }
 
-  // Обновить запись об адресе
+  const pool = new Pool()
+  await pool.query(`
+    UPDATE "User_Deliveries" SET city = $3, street = $4, house = $5, entrance = $6, floor = $7, apartment = $8, commentary = $9
+    WHERE id = $1 AND user_id = $2
+  `, [+id, tokenInfo!.id, body.city, body.street, body.house, body.entrance, body.floor, body.apartment, body.commentary])
 
   return true
 })

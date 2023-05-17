@@ -1,6 +1,8 @@
+import * as pg from 'pg'
 import { clientGenerateToken, clientIsValidToken, clientGetInfoFromToken } from '~~/backend/utils/clientToken'
+const { Pool } = pg.default
 
-export default defineEventHandler((event) => {
+export default defineEventHandler(async (event) => {
   const token = getCookie(event, 'token')
   if (!clientIsValidToken(token)) {
     throw createError({
@@ -12,17 +14,8 @@ export default defineEventHandler((event) => {
 
   setCookie(event, 'token', clientGenerateToken(tokenInfo!.id))
 
-  const mockDeliveries = [
-    {
-      id: 1,
-      city: 'Минск',
-      street: 'Пулихова',
-      house: 31,
-      entrance: 2,
-      floor: 7,
-      apartment: 45
-    }
-  ]
+  const pool = new Pool()
+  const deliveriesSQL = await pool.query('SELECT * FROM "User_Deliveries" WHERE user_id = $1', [tokenInfo!.id])
 
-  return mockDeliveries
+  return deliveriesSQL.rows
 })
