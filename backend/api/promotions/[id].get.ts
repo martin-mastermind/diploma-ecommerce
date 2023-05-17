@@ -14,6 +14,7 @@ export default defineEventHandler(async (event) => {
 
   const promotionSQL = await pool.query('SELECT id, img, title, message, img, total_discount FROM "Promotions" WHERE id = $1', [+id])
   if (promotionSQL.rows.length === 0) {
+    await pool.end()
     throw createError({
       statusCode: 400,
       message: 'Не удалось найти указанную акцию'

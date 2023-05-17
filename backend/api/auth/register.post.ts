@@ -1,9 +1,12 @@
 import { createHash } from 'crypto'
 
+import * as pg from 'pg'
 import { clientGenerateToken, clientIsValidToken } from '~~/backend/utils/clientToken'
 
+const { Pool } = pg.default
+
 export default defineEventHandler(async (event) => {
-  const body = await readBody<{ name?: string, phone?: string, email?: string, password?: string }>(event)
+  const body = await readBody<{ name: string, phone: string, email: string, password: string }>(event)
   const props = ['name', 'phone', 'email', 'password'] as Array<'name' | 'phone' | 'email' | 'password'>
 
   for (const prop of props) {
@@ -22,35 +25,30 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  const mockUsers = [
-    {
-      id: 1,
-      name: 'Мартин',
-      email: 'martbelmoaw@gmail.com',
-      phone: '+375257075176',
-      password: 'daf6e3fa8a4a42748c389b4caffb0a7b6bc7de3bb981e20370d7a92acc595b37'
-    }
-  ]
+  const hashedPassword = createHash('sha256').update(body.password).digest('hex')
+  const pool = new Pool()
 
-  const hashedPassword = createHash('sha256').update(body.password!).digest('hex')
-  const user = mockUsers.find(u => u.email === body.email || u.phone === body.phone)
-
-  if (user != null) {
+  const userSQL = await pool.query('SELECT id FROM "Users" WHERE email = $1 OR phone = $2', [body.email, body.phone])
+  if (userSQL.rows.length > 0) {
+    await pool.end()
     throw createError({
       statusCode: 400,
       message: 'Пользователь с такими данными уже существует'
     })
   }
 
-  // Добавить пользователя в БД
-
-  const newUser = {
-    id: 2,
-    name: body.name,
-    phone: body.phone,
-    email: body.email,
-    password: hashedPassword
+  const newUserSQL = await pool.query('INSERT INTO "Users"(name, email, phone, password) VALUES($1, $2, $3, $4) RETURNING *', [body.name, body.email, body.phone, hashedPassword])
+  if (newUserSQL.rows.length === 0) {
+    await pool.end()
+    throw createError({
+      statusCode: 500,
+      message: 'Не удалось зарегистрировать пользователя'
+    })
   }
+
+  await pool.end()
+
+  const newUser = newUserSQL.rows[0]
 
   setCookie(event, 'token', clientGenerateToken(newUser.id))
 

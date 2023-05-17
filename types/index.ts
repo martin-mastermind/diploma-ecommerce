@@ -1,4 +1,4 @@
-declare module 'pg'
+export {}
 
 declare global {
   interface AdminUser {
@@ -229,89 +229,89 @@ declare global {
       goods: GoodPreview[]
     }
 
-    type CatalogSortType = 'default' | 'price-down' | 'price-up' | 'rating'
+      type CatalogSortType = 'default' | 'price-down' | 'price-up' | 'rating'
 
-    interface CatalogSort {
-      type: CatalogSortType
-      title: string
-    }
-
-    interface CatalogFilter {
-      from: number
-      to: number
-    }
-
-    interface User {
-      id: number
-      name: string
-      phone: string
-      email: string
-    }
-
-    interface UserData {
-      name: string
-      phone: string
-      email: string
-      password: string
-    }
-
-    interface CartItem {
-      id: number
-      amount: number
-    }
-
-    interface CartListItem extends CartItem {
-      title: string
-      price: number
-      img: string
-    }
-
-    interface OrderInfo {
-      userDelivery: number | null
-      payType: 'cash' | 'card'
-      coupon: string | null
-      deliveryDate: string | null
-      deliveryTimeFrom: string | null
-      deliveryTimeTo: string | null
-    }
-
-    interface OrderData extends OrderInfo {
-      goods: CartItem[]
-    }
-
-    interface UserDelivery {
-      id: number
-      city: string
-      street: string
-      house: number
-      entrance: number
-      floor: number
-      apartment: number
-    }
-
-    interface UserDeliveryFull extends UserDelivery {
-      commentary: string
-    }
-
-    interface Order {
-      id: number
-      total: number
-      delivery_date: string
-      delivery_from_time: string
-      delivery_to_time: string
-      status: 'new' | 'in-work' | 'success' | 'canceled'
-    }
-
-    interface AppealPreview {
-      id: number
-      admin?: {
-        name: string
+      interface CatalogSort {
+        type: CatalogSortType
+        title: string
       }
-      status: 'new' | 'in-work' | 'closed'
-    }
 
-    interface Appeal extends AppealPreview {
-      messages: AppealMessage[]
-    }
+      interface CatalogFilter {
+        from: number
+        to: number
+      }
+
+      interface User {
+        id: number
+        name: string
+        phone: string
+        email: string
+      }
+
+      interface UserData {
+        name: string
+        phone: string
+        email: string
+        password: string
+      }
+
+      interface CartItem {
+        id: number
+        amount: number
+      }
+
+      interface CartListItem extends CartItem {
+        title: string
+        price: number
+        img: string
+      }
+
+      interface OrderInfo {
+        userDelivery: number | null
+        payType: 'cash' | 'card'
+        coupon: string | null
+        deliveryDate: string | null
+        deliveryTimeFrom: string | null
+        deliveryTimeTo: string | null
+      }
+
+      interface OrderData extends OrderInfo {
+        goods: CartItem[]
+      }
+
+      interface UserDelivery {
+        id: number
+        city: string
+        street: string
+        house: number
+        entrance: number
+        floor: number
+        apartment: number
+      }
+
+      interface UserDeliveryFull extends UserDelivery {
+        commentary: string
+      }
+
+      interface Order {
+        id: number
+        total: number
+        delivery_date: string
+        delivery_from_time: string
+        delivery_to_time: string
+        status: 'new' | 'in-work' | 'success' | 'canceled'
+      }
+
+      interface AppealPreview {
+        id: number
+        admin?: {
+          name: string
+        }
+        status: 'new' | 'in-work' | 'closed'
+      }
+
+      interface Appeal extends AppealPreview {
+        messages: AppealMessage[]
+      }
   }
 }

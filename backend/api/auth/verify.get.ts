@@ -1,21 +1,15 @@
+import * as pg from 'pg'
 import { clientGenerateToken, clientIsValidToken, clientGetInfoFromToken } from '~~/backend/utils/clientToken'
 
-export default defineEventHandler((event) => {
+const { Pool } = pg.default
+
+export default defineEventHandler(async (event) => {
   const query = getQuery(event)
   const token = getCookie(event, 'token')
 
   if (!clientIsValidToken(token)) {
     return false
   }
-
-  const mockUsers = [
-    {
-      id: 1,
-      name: 'Мартин',
-      phone: '+375257075176',
-      email: 'martbelmoaw@gmail.com'
-    }
-  ]
 
   const tokenUserId = clientGetInfoFromToken(token!)!.id
   const queryUserId = query.id?.toString() ?? ''
@@ -25,12 +19,17 @@ export default defineEventHandler((event) => {
     return false
   }
 
-  const user = mockUsers.find(u => u.id === tokenUserId)
+  const pool = new Pool()
 
-  if (user == null) {
+  const userSQL = await pool.query('SELECT id, name, email, phone FROM "Users" WHERE id = $1', [tokenUserId])
+  if (userSQL.rows.length === 0) {
+    await pool.end()
     deleteCookie(event, 'token')
     return false
   }
+  await pool.end()
+
+  const user = userSQL.rows[0]
 
   setCookie(event, 'token', clientGenerateToken(user.id))
 

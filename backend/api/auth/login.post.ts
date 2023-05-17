@@ -1,22 +1,21 @@
 import { createHash } from 'crypto'
 
+import * as pg from 'pg'
 import { clientGenerateToken, clientIsValidToken } from '~~/backend/utils/clientToken'
 
+const { Pool } = pg.default
+
 export default defineEventHandler(async (event) => {
-  const body = await readBody<{ email?: string, password?: string }>(event)
+  const body = await readBody<{ email: string, password: string }>(event)
+  const props = ['email', 'password'] as Array<'email' | 'password'>
 
-  if (body.email == null) {
-    throw createError({
-      statusCode: 400,
-      message: 'Не указано поле email'
-    })
-  }
-
-  if (body.password == null) {
-    throw createError({
-      statusCode: 400,
-      message: 'Не указано поле password'
-    })
+  for (const prop of props) {
+    if (body[prop] == null) {
+      throw createError({
+        statusCode: 400,
+        message: `Не указано поле ${prop}`
+      })
+    }
   }
 
   if (clientIsValidToken(getCookie(event, 'token'))) {
@@ -26,25 +25,21 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  const mockUsers = [
-    {
-      id: 1,
-      name: 'Мартин',
-      phone: '+375257075176',
-      email: 'martbelmoaw@gmail.com',
-      password: 'daf6e3fa8a4a42748c389b4caffb0a7b6bc7de3bb981e20370d7a92acc595b37'
-    }
-  ]
-
   const hashedPassword = createHash('sha256').update(body.password).digest('hex')
-  const user = mockUsers.find(u => u.email === body.email && u.password === hashedPassword)
+  const pool = new Pool()
 
-  if (user == null) {
+  const userSQL = await pool.query('SELECT id, name, email, phone FROM "Users" WHERE email = $1 AND password = $2', [body.email, hashedPassword])
+  if (userSQL.rows.length === 0) {
+    await pool.end()
     throw createError({
       statusCode: 400,
-      message: 'Не найден пользователь с такими данными'
+      message: 'Пользователя с такими данными не существует'
     })
   }
+
+  await pool.end()
+
+  const user = userSQL.rows[0]
 
   setCookie(event, 'token', clientGenerateToken(user.id))
 
