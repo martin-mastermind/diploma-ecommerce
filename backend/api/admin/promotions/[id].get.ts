@@ -1,6 +1,17 @@
+import * as pg from 'pg'
 import { generateToken, isValidToken, getInfoFromToken } from '~~/backend/utils/adminToken'
 
-export default defineEventHandler((event) => {
+const { Pool } = pg.default
+
+export default defineEventHandler(async (event) => {
+  const id = event.context.params?.id
+  if (id === undefined) {
+    throw createError({
+      statusCode: 400,
+      message: 'Не указан id акции'
+    })
+  }
+
   const token = getCookie(event, 'token')
   if (!isValidToken(token)) {
     throw createError({
@@ -10,40 +21,23 @@ export default defineEventHandler((event) => {
   }
   setCookie(event, 'token', generateToken(getInfoFromToken(token!)!.id))
 
-  const id = event.context.params?.id
-  if (id === undefined) {
-    throw createError({
-      statusCode: 400,
-      message: 'Не указан id акции'
-    })
-  }
+  const pool = new Pool()
+  const promotionSQL = await pool.query('SELECT * FROM "Promotions" WHERE id = $1', [+id])
 
-  const mockPromotions = [
-    {
-      id: 1,
-      title: '9 Мая',
-      img: '',
-      message: '',
-      total_discount: 5,
-      status: 'active',
-      rules: [
-        {
-          id: 1,
-          category_id: 1,
-          discount: 10
-        }
-      ]
-    }
-  ]
-
-  const promotion = mockPromotions.find(p => p.id === +id)
-
-  if (promotion == null) {
+  if (promotionSQL.row.length === 0) {
     throw createError({
       statusCode: 400,
       message: 'Не удалось найти акцию'
     })
   }
 
-  return promotion
+  const promotion = promotionSQL.row[0]
+  const rules = await pool.query('SELECT * FROM "Promotion_Rules" WHERE promotion_id = $1', [promotion.id])
+
+  await pool.end()
+
+  return {
+    ...promotion,
+    rules
+  }
 })
