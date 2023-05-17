@@ -12,7 +12,7 @@ export function useRegister () {
 
   const pending = ref(false)
 
-  const isValidPhone = (value: string) => /^\+375[\d]{9}$/.test(value)
+  const isValidPhone = (value: string) => /^375[\d]{9}$/.test(value)
 
   const rules = {
     name: { required },
