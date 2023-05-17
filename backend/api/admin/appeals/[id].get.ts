@@ -31,7 +31,7 @@ export default defineEventHandler(async (event) => {
     WHERE admin_id = $1 OR status = 'new'
   `, [tokenInfo!.id])
 
-  if (appealSQL.row.length === 0) {
+  if (appealSQL.rows.length === 0) {
     await pool.end()
     throw createError({
       statusCode: 400,

@@ -28,14 +28,14 @@ export default defineEventHandler(async (event) => {
   const pool = new Pool()
   const promotionSQL = await pool.query('INSERT INTO "Promotions"(title, img, message, total_discount) VALUES ($1, $2, $3, $4) RETURNING id', [body.title, body.img, body.message, body.total_discount])
 
-  if (promotionSQL.row.length === 0) {
+  if (promotionSQL.rows.length === 0) {
     throw createError({
       statusCode: 400,
       message: 'Ошибка при создании акции'
     })
   }
 
-  const promotionId = promotionSQL.row[0].id
+  const promotionId = promotionSQL.rows[0].id
 
   for (const rule of body.rules) {
     await pool.query('INSERT INTO "Promotion_Rules"(promotion_id, category_id, discount) VALUES ($1, $2, $3)', [promotionId, rule.category_id, rule.discount])

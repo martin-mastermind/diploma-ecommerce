@@ -24,12 +24,12 @@ export default defineEventHandler(async (event) => {
   const pool = new Pool()
   const goodSQL = await pool.query('SELECT * FROM "Items" WHERE id = $1', [+id])
 
-  if (goodSQL.row.length === 0) {
+  if (goodSQL.rows.length === 0) {
     throw createError({
       statusCode: 400,
       message: 'Не удалось найти товар'
     })
   }
 
-  return goodSQL.row[0]
+  return goodSQL.rows[0]
 })

@@ -28,14 +28,14 @@ export default defineEventHandler(async (event) => {
   const pool = new Pool()
   const couponSQL = await pool.query('INSERT INTO "Coupons"(title, code, use_amount, total_discount) VALUES ($1, $2, $3, $4) RETURNING id', [body.title, body.code, body.use_amount, body.total_discount])
 
-  if (couponSQL.row.length === 0) {
+  if (couponSQL.rows.length === 0) {
     throw createError({
       statusCode: 400,
       message: 'Ошибка при создании купона'
     })
   }
 
-  const couponId = couponSQL.row[0].id
+  const couponId = couponSQL.rows[0].id
 
   for (const rule of body.rules) {
     await pool.query('INSERT INTO "Coupon_Rules"(coupon_id, category_id, discount) VALUES ($1, $2, $3)', [couponId, rule.category_id, rule.discount])

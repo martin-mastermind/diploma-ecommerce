@@ -24,20 +24,20 @@ export default defineEventHandler(async (event) => {
   const pool = new Pool()
   const promotionSQL = await pool.query('SELECT * FROM "Promotions" WHERE id = $1', [+id])
 
-  if (promotionSQL.row.length === 0) {
+  if (promotionSQL.rows.length === 0) {
     throw createError({
       statusCode: 400,
       message: 'Не удалось найти акцию'
     })
   }
 
-  const promotion = promotionSQL.row[0]
-  const rules = await pool.query('SELECT * FROM "Promotion_Rules" WHERE promotion_id = $1', [promotion.id])
+  const promotion = promotionSQL.rows[0]
+  const rulesSQL = await pool.query('SELECT * FROM "Promotion_Rules" WHERE promotion_id = $1', [promotion.id])
 
   await pool.end()
 
   return {
     ...promotion,
-    rules
+    rules: rulesSQL
   }
 })

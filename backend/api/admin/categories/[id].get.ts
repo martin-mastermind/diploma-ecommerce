@@ -26,12 +26,12 @@ export default defineEventHandler(async (event) => {
 
   await pool.end()
 
-  if (categorySQL.row.length === 0) {
+  if (categorySQL.rows.length === 0) {
     throw createError({
       statusCode: 400,
       message: 'Не удалось найти категорию'
     })
   }
 
-  return categorySQL.row[0]
+  return categorySQL.rows[0]
 })

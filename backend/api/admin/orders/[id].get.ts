@@ -1,6 +1,17 @@
+import * as pg from 'pg'
 import { generateToken, isValidToken, getInfoFromToken } from '~~/backend/utils/adminToken'
 
-export default defineEventHandler((event) => {
+const { Pool } = pg.default
+
+export default defineEventHandler(async (event) => {
+  const id = event.context.params?.id
+  if (id === undefined) {
+    throw createError({
+      statusCode: 400,
+      message: 'Не указан id заказа'
+    })
+  }
+
   const token = getCookie(event, 'token')
   if (!isValidToken(token)) {
     throw createError({
@@ -10,66 +21,67 @@ export default defineEventHandler((event) => {
   }
   setCookie(event, 'token', generateToken(getInfoFromToken(token!)!.id))
 
-  const id = event.context.params?.id
-  if (id === undefined) {
+  const pool = new Pool()
+  const orderSQL = await pool.query(`
+    SELECT o.*, u.name, u.phone, u.email, ud.city, ud.street, ud.house, ud.entrance, ud.floor, ud.apartment, ud.commentary
+    FROM "Orders" o
+    JOIN "Users" u ON o.user_id = u.id
+    JOIN "User_Deliveries" ud ON o.user_delivery_id = ud.id
+    WHERE o.id = $1
+  `, [+id])
+
+  if (orderSQL.row.length === 0) {
     throw createError({
       statusCode: 400,
-      message: 'Не указан id заказа'
+      message: 'Данного заказа не существует'
     })
   }
 
-  const mockOrders = [
-    {
-      id: 1,
-      user: {
-        name: 'Мартин',
-        phone: '+375 25 707 5176',
-        email: 'martbelmoaw@gmail.com'
-      },
-      user_delivery: {
-        city: 'Минск',
-        street: 'Пулихова',
-        house: 31,
-        entrance: 2,
-        floor: 7,
-        apartment: 45,
-        commentary: 'корпус 1'
-      },
-      coupon: {
-        code: 'new-user',
-        total_discount: 10,
-        rules: [
-          {
-            category: 'Фрукты',
-            discount: 15
-          }
-        ]
-      },
-      pay_type: 'card',
-      delivery_date: '09.05.2023',
-      delivery_from_time: '11:00',
-      delivery_to_time: '14:00',
-      status: 'new',
-      goods: [
-        {
-          title: 'Банан',
-          category: 'Фрукты',
-          vendor_code: 'G-1000',
-          price: 2.5,
-          amount: 2
-        }
-      ]
+  const order = orderSQL.rows[0]
+
+  const couponSQL = await pool.query('SELECT id, code, total_discount FROM "Coupons" WHERE id = $1', [order.coupon_id])
+  if (couponSQL.row.length !== 0) {
+    const coupon = couponSQL.rows[0]
+    const rulesSQL = await pool.query('SELECT * FROM "Coupon_Rules" WHERE coupon_id = $1', [coupon.id])
+
+    order.coupon = {
+      ...coupon,
+      rules: rulesSQL.rows
     }
-  ]
-
-  const order = mockOrders.find(o => o.id === +id)
-
-  if (order == null) {
-    throw createError({
-      statusCode: 400,
-      message: 'Не удалось найти заказ'
-    })
   }
 
-  return order
+  const goodsSQL = await pool.query(`
+    SELECT i.title, c.title category, i.vendor_code, i.price, oi.amount
+    FROM "Order_Items" oi
+    JOIN "Items" i ON oi.item_id = i.id
+    JOIN "Categories" c ON i.category_id = c.id
+    WHERE oi.order_id = $1
+  `, [order.id])
+
+  await pool.end()
+
+  return {
+    id: order.id,
+    user: {
+      name: order.name,
+      phone: order.phone,
+      email: order.email
+    },
+    user_delivery: {
+      city: order.city,
+      street: order.street,
+      house: order.house,
+      entrance: order.entrance,
+      floor: order.floor,
+      apartment: order.apartment,
+      commentary: order.commentary
+    },
+    coupon: order.coupon ?? null,
+    pay_type: order.pay_type,
+    delivery_date: order.delivery_date,
+    delivery_from_time: order.delivery_from_time,
+    delivery_to_time: order.delivery_to_time,
+    status: order.status,
+    goods: goodsSQL.rows
+  }
 })

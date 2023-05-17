@@ -31,7 +31,7 @@ export default defineEventHandler(async (event) => {
   await pool.query('UPDATE "Appeals" SET admin_id = $2, status = \'in-work\' WHERE id = $1 AND status = \'new\'', [body.id, tokenInfo!.id])
 
   const appealSQL = await pool.query('SELECT id FROM "Appeals" WHERE id = $1 AND admin_id = $2', [body.id, tokenInfo!.id])
-  if (appealSQL.row.length === 0) {
+  if (appealSQL.rows.length === 0) {
     throw createError({
       statusCode: 400,
       message: 'Обращение недоступно'

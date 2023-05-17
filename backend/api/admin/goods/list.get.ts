@@ -18,5 +18,5 @@ export default defineEventHandler(async (event) => {
 
   await pool.end()
 
-  return goodsSql.row
+  return goodsSql.rows
 })
