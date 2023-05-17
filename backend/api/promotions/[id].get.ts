@@ -12,7 +12,7 @@ export default defineEventHandler(async (event) => {
 
   const pool = new Pool()
 
-  const promotionSQL = await pool.query('SELECT id, img, title, message, img, total_discount FROM "Promotions" WHERE id = $1', [+id])
+  const promotionSQL = await pool.query('SELECT id, img, title, message, img, total_discount FROM "Promotions" WHERE id = $1 AND status = \'active\'', [+id])
   if (promotionSQL.rows.length === 0) {
     await pool.end()
     throw createError({

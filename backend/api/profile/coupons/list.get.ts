@@ -1,6 +1,8 @@
+import * as pg from 'pg'
 import { clientGenerateToken, clientIsValidToken, clientGetInfoFromToken } from '~~/backend/utils/clientToken'
+const { Pool } = pg.default
 
-export default defineEventHandler((event) => {
+export default defineEventHandler(async (event) => {
   const token = getCookie(event, 'token')
   if (!clientIsValidToken(token)) {
     throw createError({
@@ -12,20 +14,24 @@ export default defineEventHandler((event) => {
 
   setCookie(event, 'token', clientGenerateToken(tokenInfo!.id))
 
-  const mockCoupons = [
-    {
-      id: 1,
-      title: 'Для новых пользоватей',
-      code: 'new-user',
-      total_discount: 10,
-      rules: [
-        {
-          category: 'Фрукты',
-          discount: 5
-        }
-      ]
-    }
-  ]
+  const pool = new Pool()
 
-  return mockCoupons
+  const couponsSQL = await pool.query('SELECT id, title, code, total_discount FROM "Coupons" WHERE use_amount > 0')
+
+  const coupons = []
+  for (const coupon of couponsSQL.rows) {
+    const rulesSQL = await pool.query(`
+      SELECT c.title category, pr.discount 
+      FROM "Coupon_Rules" cr 
+      JOIN "Categories" c ON cr.category_id = c.id 
+      WHERE coupon_id = $1
+    `, [coupon.id])
+
+    coupons.push({
+      ...coupon,
+      rules: rulesSQL.rows
+    })
+  }
+
+  return coupons
 })

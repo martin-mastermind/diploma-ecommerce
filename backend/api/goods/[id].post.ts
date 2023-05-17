@@ -46,7 +46,7 @@ export default defineEventHandler(async (event) => {
     SELECT i.*, AVG(score) total, COUNT(score) total_reviews
     FROM "Items" i
     JOIN "Item_Reviews" ir ON ir.item_id = i.id
-    WHERE i.id = $1
+    WHERE i.id = $1 AND i.amount > 0
     GROUP BY i.id
   `, [+id])
 
