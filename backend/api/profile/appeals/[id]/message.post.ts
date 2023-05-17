@@ -44,7 +44,7 @@ export default defineEventHandler(async (event) => {
     appealId = +appealSQL.rows[0].id
   }
 
-  await pool.query('INSERT INTO "Appeal_Messages"(from_admin, message) VALUES (\'false\', $1)', [body.text])
+  await pool.query('INSERT INTO "Appeal_Messages"(appeal_id, from_admin, message) VALUES ($1, \'false\', $2)', [appealId, body.text])
 
   const appealSQL = await pool.query(`
     SELECT a.id, CONCAT(adm.last_name, ' ', adm.first_name, ' ', adm.patronymic) admin_name, a.status 

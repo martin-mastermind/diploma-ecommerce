@@ -1,15 +1,9 @@
+import * as pg from 'pg'
 import { generateToken, isValidToken, getInfoFromToken } from '~~/backend/utils/adminToken'
 
-export default defineEventHandler((event) => {
-  const token = getCookie(event, 'token')
-  if (!isValidToken(token)) {
-    throw createError({
-      statusCode: 403,
-      message: 'Пользователь не авторизован'
-    })
-  }
-  setCookie(event, 'token', generateToken(getInfoFromToken(token!)!.id))
+const { Pool } = pg.default
 
+export default defineEventHandler(async (event) => {
   const id = event.context.params?.id
   if (id === undefined) {
     throw createError({
@@ -18,38 +12,41 @@ export default defineEventHandler((event) => {
     })
   }
 
-  const mockAppeals = [
-    {
-      id: 1,
-      user: {
-        name: 'Мартин',
-        phone: '+375 25 707 5176',
-        email: 'martbelmoaw@gmail.com'
-      },
-      status: 'in-work',
-      messages: [
-        {
-          from_admin: false,
-          sent_time: '08.05.2023 16:26',
-          message: 'Здравствуйте!'
-        },
-        {
-          from_admin: true,
-          sent_time: '08.05.2023 16:32',
-          message: 'Приветствую!'
-        }
-      ]
-    }
-  ]
-
-  const appeal = mockAppeals.find(a => a.id === +id)
-
-  if (appeal == null) {
+  const token = getCookie(event, 'token')
+  if (!isValidToken(token)) {
     throw createError({
-      statusCode: 400,
-      message: 'Не удалось найти обращение'
+      statusCode: 403,
+      message: 'Пользователь не авторизован'
     })
   }
 
-  return appeal
+  const tokenInfo = getInfoFromToken(token!)
+  setCookie(event, 'token', generateToken(tokenInfo!.id))
+
+  const pool = new Pool()
+  const appealSQL = await pool.query(`
+    SELECT a.id, u.name user_name, u.phone user_phone, u.email user_email, a.status 
+    FROM "Appeals" a
+    JOIN "Users" u ON a.user_id = u.id
+    WHERE admin_id = $1 OR status = 'new'
+  `, [tokenInfo!.id])
+
+  if (appealSQL.row.length === 0) {
+    await pool.end()
+    throw createError({
+      statusCode: 400,
+      message: 'Обращение недоступно'
+    })
+  }
+
+  const appeal = appealSQL.rows[0]
+
+  const messagesSQL = await pool.query('SELECT from_admin, sent_time, message FROM "Appeal_Messages" WHERE appeal_id = $1', [appeal.id])
+
+  await pool.end()
+
+  return {
+    ...appeal,
+    messages: messagesSQL.rows
+  }
 })

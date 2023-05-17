@@ -1,6 +1,9 @@
+import * as pg from 'pg'
 import { generateToken, isValidToken, getInfoFromToken } from '~~/backend/utils/adminToken'
 
-export default defineEventHandler((event) => {
+const { Pool } = pg.default
+
+export default defineEventHandler(async (event) => {
   const token = getCookie(event, 'token')
   if (!isValidToken(token)) {
     throw createError({
@@ -8,16 +11,29 @@ export default defineEventHandler((event) => {
       message: 'Пользователь не авторизован'
     })
   }
-  setCookie(event, 'token', generateToken(getInfoFromToken(token!)!.id))
 
-  const mockAppeals = [
-    {
-      id: 1,
+  const tokenInfo = getInfoFromToken(token!)
+  setCookie(event, 'token', generateToken(tokenInfo!.id))
+
+  const pool = new Pool()
+  const appealsSQL = await pool.query(`
+    SELECT a.id, u.name user_name, a.status 
+    FROM "Appeals" a
+    JOIN "Users" u ON a.user_id = u.id
+    WHERE admin_id = $1 OR status = 'new'
+  `, [tokenInfo!.id])
+
+  await pool.end()
+
+  const appeals = []
+  for (const appeal of appealsSQL.rows) {
+    appeals.push({
+      id: appeal.id,
       user: {
-        name: 'Мартин'
+        name: appeal.user_name
       }
-    }
-  ]
+    })
+  }
 
-  return mockAppeals
+  return appeals
 })
