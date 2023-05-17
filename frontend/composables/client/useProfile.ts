@@ -13,7 +13,7 @@ export function useProfile () {
 
   const pending = ref(false)
 
-  const isValidPhone = (value: string) => /^\+375[\d]{9}$/.test(value)
+  const isValidPhone = (value: string) => /^375[\d]{9}$/.test(value)
 
   const rules = {
     name: { required },
@@ -25,7 +25,7 @@ export function useProfile () {
 
   const cannotSave = computed(() => pending.value || validator.value.$invalid)
 
-  watch(() => data.value, save, { deep: true })
+  watch(data, save, { deep: true })
 
   async function save () {
     if (cannotSave.value) { return false }

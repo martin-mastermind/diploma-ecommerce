@@ -1,6 +1,9 @@
 import { createHash } from 'crypto'
 
+import * as pg from 'pg'
 import { clientGenerateToken, clientIsValidToken, clientGetInfoFromToken } from '~~/backend/utils/clientToken'
+
+const { Pool } = pg.default
 
 export default defineEventHandler(async (event) => {
   const token = getCookie(event, 'token')
@@ -15,9 +18,9 @@ export default defineEventHandler(async (event) => {
   setCookie(event, 'token', clientGenerateToken(tokenInfo!.id))
 
   const body = await readBody<Client.UserData>(event)
-  const props = ['name', 'phone', 'email', 'password'] as Array<'name' | 'phone' | 'email' | 'password'>
+  let prop: keyof Client.UserData
 
-  for (const prop of props) {
+  for (prop in body) {
     if (body[prop] == null) {
       throw createError({
         statusCode: 400,
@@ -26,34 +29,33 @@ export default defineEventHandler(async (event) => {
     }
   }
 
-  const mockUsers = [
-    {
-      id: 1,
-      name: 'Мартин',
-      email: 'martbelmoaw@gmail.com',
-      phone: '+375257075176',
-      password: 'daf6e3fa8a4a42748c389b4caffb0a7b6bc7de3bb981e20370d7a92acc595b37'
-    }
-  ]
-
   const hashedPassword = createHash('sha256').update(body.password).digest('hex')
-  const user = mockUsers.find(u => u.id === tokenInfo!.id)
 
-  if (user == null) {
+  const pool = new Pool()
+
+  const hasChangedPassword = body.password.length >= 8
+
+  const query = `UPDATE "Users" SET name = $2, email = $3, phone = $4${hasChangedPassword ? ', password = $5 ' : ' '}WHERE id = $1 RETURNING *`
+  const data = [tokenInfo!.id, body.name, body.email, body.phone]
+  if (hasChangedPassword) { data.push(hashedPassword) }
+
+  const userSQL = await pool.query(query, data)
+  if (userSQL.rows.length === 0) {
+    await pool.end()
     throw createError({
-      statusCode: 403,
-      message: 'Пользователя с таким ID не существует'
+      statusCode: 400,
+      message: 'Ошибка при обновлении профиля...'
     })
   }
 
-  user.password = hashedPassword
+  await pool.end()
 
-  // Обновить пользователя в БД
+  const user = userSQL.rows[0]
 
   return {
-    id: tokenInfo!.id,
-    name: body.name,
-    phone: body.phone,
-    email: body.email
+    id: user.id,
+    name: user.name,
+    phone: user.phone,
+    email: user.email
   }
 })
