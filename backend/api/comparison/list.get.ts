@@ -1,4 +1,7 @@
-export default defineEventHandler((event) => {
+import * as pg from 'pg'
+const { Pool } = pg.default
+
+export default defineEventHandler(async (event) => {
   const body = getQuery(event)
 
   if (body.ids == null) {
@@ -8,28 +11,18 @@ export default defineEventHandler((event) => {
     })
   }
 
-  const mockGoods = [
-    {
-      id: 1,
-      title: 'Банан',
-      img: 'https://cs8.pikabu.ru/post_img/big/2016/04/21/5/1461224935173673.jpg',
-      characteristic: `Пищевая ценность на 100 г
-  Белки: 1.5
-  Жиры: 0.5
-  Углеводы: 21
-  Энергетическая ценность: 89 ккал / 372 кДж`,
-      weight: '1-1.2 кг',
-      price: 2.5
-    },
-    {
-      id: 2,
-      title: 'Яблоко',
-      img: '',
-      characteristic: '',
-      weight: '',
-      price: 1.89
-    }
-  ]
+  try {
+    const ids = JSON.parse(`${body.ids as string}`)
+    const pool = new Pool()
 
-  return mockGoods
+    const goodsSQL = await pool.query('SELECT id, title, img, characteristic, weight, price FROM "Items" WHERE id IN ($1)', [ids.join(', ')])
+    await pool.end()
+
+    return goodsSQL.rows
+  } catch {
+    throw createError({
+      statusCode: 400,
+      message: 'Неверное поле ids'
+    })
+  }
 })
