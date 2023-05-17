@@ -1,6 +1,8 @@
+import * as pg from 'pg'
 import { clientGenerateToken, clientIsValidToken, clientGetInfoFromToken } from '~~/backend/utils/clientToken'
+const { Pool } = pg.default
 
-export default defineEventHandler((event) => {
+export default defineEventHandler(async (event) => {
   const token = getCookie(event, 'token')
   if (!clientIsValidToken(token)) {
     throw createError({
@@ -21,20 +23,18 @@ export default defineEventHandler((event) => {
     })
   }
 
-  const mockCart = [
-    {
-      id: 1,
-      title: 'Банан',
-      img: 'https://cs8.pikabu.ru/post_img/big/2016/04/21/5/1461224935173673.jpg',
-      price: 2.5
-    },
-    {
-      id: 2,
-      title: 'Яблоко',
-      img: '',
-      price: 1.89
-    }
-  ]
+  try {
+    const ids = JSON.parse(`${body.ids as string}`)
+    const pool = new Pool()
 
-  return mockCart
+    const goodsSQL = await pool.query('SELECT id, title, img, price FROM "Items" WHERE id IN ($1)', [ids.join(', ')])
+    await pool.end()
+
+    return goodsSQL.rows
+  } catch {
+    throw createError({
+      statusCode: 400,
+      message: 'Неверное поле ids'
+    })
+  }
 })
