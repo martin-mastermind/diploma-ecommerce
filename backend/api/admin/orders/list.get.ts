@@ -18,6 +18,7 @@ export default defineEventHandler(async (event) => {
     SELECT o.id, u.name user_name
     FROM "Orders" o
     JOIN "Users" u ON o.user_id = u.id
+    ORDER BY o.id DESC
   `)
 
   await pool.end()

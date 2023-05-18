@@ -14,7 +14,7 @@ export default defineEventHandler(async (event) => {
   setCookie(event, 'token', generateToken(getInfoFromToken(token!)!.id))
 
   const pool = new Pool()
-  const categoriesSQL = await pool.query('SELECT id, title FROM "Categories"')
+  const categoriesSQL = await pool.query('SELECT id, title FROM "Categories" ORDER BY id DESC')
 
   await pool.end()
 

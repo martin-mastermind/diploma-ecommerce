@@ -21,6 +21,7 @@ export default defineEventHandler(async (event) => {
     FROM "Appeals" a
     JOIN "Users" u ON a.user_id = u.id
     WHERE (admin_id = $1 AND status = 'in-work') OR status = 'new'
+    ORDER BY a.id DESC
   `, [tokenInfo!.id])
 
   await pool.end()
