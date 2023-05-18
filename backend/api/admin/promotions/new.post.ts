@@ -26,7 +26,7 @@ export default defineEventHandler(async (event) => {
   }
 
   const pool = new Pool()
-  const promotionSQL = await pool.query('INSERT INTO "Promotions"(title, img, message, total_discount) VALUES ($1, $2, $3, $4) RETURNING id', [body.title, body.img, body.message, body.total_discount])
+  const promotionSQL = await pool.query('INSERT INTO "Promotions"(title, img, message, total_discount, status) VALUES ($1, $2, $3, $4, $5) RETURNING id', [body.title, body.img, body.message, body.total_discount, body.status])
 
   if (promotionSQL.rows.length === 0) {
     throw createError({

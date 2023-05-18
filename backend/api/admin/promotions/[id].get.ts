@@ -38,6 +38,6 @@ export default defineEventHandler(async (event) => {
 
   return {
     ...promotion,
-    rules: rulesSQL
+    rules: rulesSQL.rows
   }
 })

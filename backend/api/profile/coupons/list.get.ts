@@ -21,7 +21,7 @@ export default defineEventHandler(async (event) => {
   const coupons = []
   for (const coupon of couponsSQL.rows) {
     const rulesSQL = await pool.query(`
-      SELECT c.title category, pr.discount 
+      SELECT c.title category, cr.discount 
       FROM "Coupon_Rules" cr 
       JOIN "Categories" c ON cr.category_id = c.id 
       WHERE coupon_id = $1
