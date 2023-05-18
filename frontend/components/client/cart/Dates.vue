@@ -6,11 +6,8 @@ const deliveryDate = ref<string | null>(null)
 function updateDate () {
   deliveryDate.value = dateRef.value!.value
 
-  const cartDate = dateRef.value!.valueAsDate?.toLocaleDateString() ?? null
-  if (!cartDate) { return }
-
   useEvent('cart:update', {
-    deliveryDate: cartDate
+    deliveryDate: deliveryDate.value
   })
 }
 const dateMinMax = computed(() => {

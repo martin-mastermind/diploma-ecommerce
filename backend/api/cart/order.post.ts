@@ -18,6 +18,8 @@ export default defineEventHandler(async (event) => {
 
   let prop: keyof Client.OrderData
   for (prop in body) {
+    if (prop === 'coupon') { continue }
+
     if (body[prop] == null) {
       throw createError({
         statusCode: 400,
@@ -35,14 +37,18 @@ export default defineEventHandler(async (event) => {
 
   const pool = new Pool()
 
-  const couponSQL = await pool.query('SELECT id FROM "Coupons" WHERE code = $1', [body.coupon])
-  const couponId = couponSQL.rows.length === 0 ? null : couponSQL.rows[0].id
+  let couponId = null
+
+  if (body.coupon !== null) {
+    const couponSQL = await pool.query('SELECT id FROM "Coupons" WHERE code = $1', [body.coupon])
+    couponId = couponSQL.rows.length === 0 ? null : couponSQL.rows[0].id
+  }
 
   const orderSQL = await pool.query(`
-    INSERT INTO "Orders"(user_id, user_delivery_id, coupon_id, pay_type, delivery_date, delivery_from_time, delivery_to_time)
-    VALUES ($1, $2, $3, $4, $5, $6, $7)
-    RETURNING id
-  `, tokenInfo!.id, body.userDelivery, couponId, body.deliveryDate, body.deliveryTimeFrom, body.deliveryTimeTo)
+  INSERT INTO "Orders"(user_id, user_delivery_id, coupon_id, pay_type, delivery_date, delivery_from_time, delivery_to_time)
+  VALUES ($1, $2, $3, $4, $5, $6, $7)
+  RETURNING id
+  `, [tokenInfo!.id, body.userDelivery, couponId, body.payType, body.deliveryDate, body.deliveryTimeFrom, body.deliveryTimeTo])
 
   if (orderSQL.rows.length === 0) {
     throw createError({

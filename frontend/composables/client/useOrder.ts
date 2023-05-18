@@ -24,7 +24,7 @@ export function useOrder () {
 
   const pending = ref(false)
 
-  const isValidDate = (value: string) => /^\d{2}\.\d{2}\.\d{4}$/.test(value)
+  const isValidDate = (value: string) => /^\d{4}-\d{2}-\d{2}$/.test(value)
   const isValidTime = (value: string) => /^\d{2}:\d{2}$/.test(value)
 
   const rules = {
@@ -35,7 +35,7 @@ export function useOrder () {
     deliveryTimeFrom: { required, isValidTime },
     deliveryTimeTo: { required, isValidTime }
   }
-  const validator = useVuelidate(rules, data)
+  const validator = useVuelidate(rules, data, { $scope: false })
 
   const cannotOrder = computed(() => pending.value || validator.value.$invalid)
 
