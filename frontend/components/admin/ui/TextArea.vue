@@ -10,7 +10,7 @@ const emit = defineEmits(['update:modelValue'])
 const input = ref(null as HTMLTextAreaElement | null)
 
 function emitInput () {
-  emit('update:modelValue', input.value!.innerText)
+  emit('update:modelValue', input.value!.value)
 }
 </script>
 
