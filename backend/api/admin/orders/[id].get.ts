@@ -30,7 +30,7 @@ export default defineEventHandler(async (event) => {
     WHERE o.id = $1
   `, [+id])
 
-  if (orderSQL.row.length === 0) {
+  if (orderSQL.rows.length === 0) {
     throw createError({
       statusCode: 400,
       message: 'Данного заказа не существует'
@@ -40,7 +40,7 @@ export default defineEventHandler(async (event) => {
   const order = orderSQL.rows[0]
 
   const couponSQL = await pool.query('SELECT id, code, total_discount FROM "Coupons" WHERE id = $1', [order.coupon_id])
-  if (couponSQL.row.length !== 0) {
+  if (couponSQL.rows.length !== 0) {
     const coupon = couponSQL.rows[0]
     const rulesSQL = await pool.query('SELECT * FROM "Coupon_Rules" WHERE coupon_id = $1', [coupon.id])
 
