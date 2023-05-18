@@ -40,10 +40,10 @@ export default defineEventHandler(async (event) => {
 
   const pool = new Pool()
 
-  await pool.query('INSERT INTO "Item_Reviews"(user_id, item_id, score, commentary) VALUES($1, $2, $3, $4)', [tokenInfo!.id, +id, body.rating, body.message])
+  await pool.query('INSERT INTO "Item_Reviews"(user_id, item_id, score, commentary) VALUES($1, $2, $3, $4)', [tokenInfo!.id, +id, +body.rating, body.message])
 
   const goodSQL = await pool.query(`
-    SELECT i.*, COALESCE(AVG(score),0) total, COALESCE(COUNT(score),0) total_reviews 
+    SELECT i.*, COALESCE(ROUND(AVG(score), 2),0) total, COALESCE(COUNT(score),0) total_reviews 
     FROM "Items" i
     LEFT JOIN "Item_Reviews" ir ON ir.item_id = i.id
     WHERE i.id = $1 AND i.amount > 0
