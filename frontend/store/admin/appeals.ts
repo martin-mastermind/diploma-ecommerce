@@ -42,6 +42,8 @@ export const useAppeals = defineStore('appealsStore', () => {
 
     if (result === false) { return false }
 
+    await getAppeal(currentAppeal.value.id)
+
     return true
   }
 

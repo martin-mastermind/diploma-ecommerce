@@ -26,8 +26,8 @@ export default defineEventHandler(async (event) => {
   const appealSQL = await pool.query(`
     SELECT a.id, CONCAT(adm.last_name, ' ', adm.first_name, ' ', adm.patronymic) admin_name, a.status 
     FROM "Appeals" a
-    JOIN "Administrators" adm ON a.admin_id = adm.id
-    WHERE id = $1 AND user_id = $2
+    LEFT JOIN "Administrators" adm ON a.admin_id = adm.id
+    WHERE a.id = $1 AND user_id = $2
   `, [+id, tokenInfo!.id])
   if (appealSQL.rows.length === 0) {
     throw createError({

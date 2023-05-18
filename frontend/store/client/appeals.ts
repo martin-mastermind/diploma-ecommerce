@@ -19,7 +19,12 @@ export const useAppeals = defineStore('appealsStore', () => {
   }
 
   async function getAppeal (id?: number) {
-    const result = await useApi(`/api/profile/appeals/${id ?? 0}`).get()
+    if (id == null || id === 0) {
+      currentAppeal.value = null
+      return true
+    }
+
+    const result = await useApi(`/api/profile/appeals/${id}`).get()
 
     if (result === false) {
       currentAppeal.value = null
@@ -37,9 +42,8 @@ export const useAppeals = defineStore('appealsStore', () => {
   }
 
   async function sendAppealMessage (text: string) {
-    if (currentAppeal.value == null) { return false }
-
-    const result = await useApi(`/api/profile/appeals/${currentAppeal.value.id}/message`, { text }).post()
+    const id = currentAppeal.value == null ? 0 : currentAppeal.value.id
+    const result = await useApi(`/api/profile/appeals/${id}/message`, { text }).post()
 
     if (result === false) {
       currentAppeal.value = null
@@ -47,6 +51,10 @@ export const useAppeals = defineStore('appealsStore', () => {
     }
 
     currentAppeal.value = result as Client.Appeal
+
+    if (id === 0) {
+      await getAppeals()
+    }
     return true
   }
 

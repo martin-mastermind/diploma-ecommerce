@@ -18,7 +18,7 @@ export default defineEventHandler(async (event) => {
   const appealsSQL = await pool.query(`
     SELECT a.id, CONCAT(adm.last_name, ' ', adm.first_name, ' ', adm.patronymic) admin_name, a.status 
     FROM "Appeals" a
-    JOIN "Administrators" adm ON a.admin_id = adm.id
+    LEFT JOIN "Administrators" adm ON a.admin_id = adm.id
     WHERE user_id = $1
   `, [tokenInfo!.id])
   await pool.end()

@@ -20,7 +20,7 @@ export default defineEventHandler(async (event) => {
     SELECT a.id, u.name user_name, a.status 
     FROM "Appeals" a
     JOIN "Users" u ON a.user_id = u.id
-    WHERE admin_id = $1 OR status = 'new'
+    WHERE (admin_id = $1 AND status = 'in-work') OR status = 'new'
   `, [tokenInfo!.id])
 
   await pool.end()
