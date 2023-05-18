@@ -29,7 +29,10 @@ export default defineEventHandler(async (event) => {
 
     orders.push({
       ...order,
-      total: totalSQL.rows[0] ?? 0
+      delivery_date: new Date(order.delivery_date).toLocaleDateString(),
+      delivery_from_time: order.delivery_from_time.slice(0, 5),
+      delivery_to_time: order.delivery_to_time.slice(0, 5),
+      total: totalSQL.rows[0].total ?? 0
     })
   }
 

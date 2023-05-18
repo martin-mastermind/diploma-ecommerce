@@ -78,9 +78,9 @@ export default defineEventHandler(async (event) => {
     },
     coupon: order.coupon ?? null,
     pay_type: order.pay_type,
-    delivery_date: order.delivery_date,
-    delivery_from_time: order.delivery_from_time,
-    delivery_to_time: order.delivery_to_time,
+    delivery_date: new Date(order.delivery_date).toLocaleDateString(),
+    delivery_from_time: order.delivery_from_time.slice(0, 5),
+    delivery_to_time: order.delivery_to_time.slice(0, 5),
     status: order.status,
     goods: goodsSQL.rows
   }
