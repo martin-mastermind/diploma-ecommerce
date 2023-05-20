@@ -25,7 +25,11 @@ export default defineEventHandler(async (event) => {
     }
   }
 
-  const pool = new Pool()
+  const pool = new Pool({
+    ssl: {
+      mode: 'require'
+    }
+  })
   await pool.query(`
     INSERT INTO "Items"(title, category_id, vendor_code, img, origin_country, description, characteristic, weight, price, amount)
     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)

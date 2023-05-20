@@ -10,7 +10,11 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  const pool = new Pool()
+  const pool = new Pool({
+    ssl: {
+      mode: 'require'
+    }
+  })
 
   const promotionSQL = await pool.query('SELECT id, img, title, message, img, total_discount FROM "Promotions" WHERE id = $1 AND status = \'active\'', [+id])
   if (promotionSQL.rows.length === 0) {

@@ -21,7 +21,11 @@ export default defineEventHandler(async (event) => {
   }
   setCookie(event, 'token', generateToken(getInfoFromToken(token!)!.id))
 
-  const pool = new Pool()
+  const pool = new Pool({
+    ssl: {
+      mode: 'require'
+    }
+  })
   const orderSQL = await pool.query(`
     SELECT o.*, u.name, u.phone, u.email, ud.city, ud.street, ud.house, ud.entrance, ud.floor, ud.apartment, ud.commentary
     FROM "Orders" o

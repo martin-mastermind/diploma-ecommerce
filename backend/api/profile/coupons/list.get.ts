@@ -14,7 +14,11 @@ export default defineEventHandler(async (event) => {
 
   setCookie(event, 'token', clientGenerateToken(tokenInfo!.id))
 
-  const pool = new Pool()
+  const pool = new Pool({
+    ssl: {
+      mode: 'require'
+    }
+  })
 
   const couponsSQL = await pool.query('SELECT id, title, code, total_discount FROM "Coupons" WHERE use_amount > 0')
 

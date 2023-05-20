@@ -19,7 +19,11 @@ export default defineEventHandler(async (event) => {
     return false
   }
 
-  const pool = new Pool()
+  const pool = new Pool({
+    ssl: {
+      mode: 'require'
+    }
+  })
 
   const userSQL = await pool.query('SELECT id, last_name, first_name, patronymic, type FROM "Administrators" WHERE id = $1', [tokenUserId])
   if (userSQL.rows.length === 0) {

@@ -30,7 +30,11 @@ export default defineEventHandler(async (event) => {
   }
 
   const hashedPassword = createHash('sha256').update(body.password).digest('hex')
-  const pool = new Pool()
+  const pool = new Pool({
+    ssl: {
+      mode: 'require'
+    }
+  })
 
   const userSQL = await pool.query('SELECT id, last_name, first_name, patronymic, type FROM "Administrators" WHERE id = $1 AND password = $2', [body.id, hashedPassword])
   if (userSQL.rows.length === 0) {

@@ -30,7 +30,11 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  const pool = new Pool()
+  const pool = new Pool({
+    ssl: {
+      mode: 'require'
+    }
+  })
   let appealId = +id
   if (appealId === 0) {
     const appealSQL = await pool.query('INSERT INTO "Appeals"(user_id) VALUES ($1) RETURNING id', [tokenInfo!.id])

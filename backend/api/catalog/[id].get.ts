@@ -10,7 +10,11 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  const pool = new Pool()
+  const pool = new Pool({
+    ssl: {
+      mode: 'require'
+    }
+  })
 
   const categorySQL = await pool.query('SELECT id, title FROM "Categories" WHERE id = $1', [+id])
   if (categorySQL.rows.length === 0) {

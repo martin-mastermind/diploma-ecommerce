@@ -10,7 +10,11 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  const pool = new Pool()
+  const pool = new Pool({
+    ssl: {
+      mode: 'require'
+    }
+  })
 
   const goodSQL = await pool.query(`
     SELECT i.*, COALESCE(ROUND(AVG(score), 2),0) total, COALESCE(COUNT(score),0) total_reviews 

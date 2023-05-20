@@ -15,7 +15,11 @@ export default defineEventHandler(async (event) => {
   const tokenInfo = getInfoFromToken(token!)
   setCookie(event, 'token', generateToken(tokenInfo!.id))
 
-  const pool = new Pool()
+  const pool = new Pool({
+    ssl: {
+      mode: 'require'
+    }
+  })
   const appealsSQL = await pool.query(`
     SELECT a.id, u.name user_name, a.status 
     FROM "Appeals" a

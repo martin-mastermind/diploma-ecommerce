@@ -27,7 +27,11 @@ export default defineEventHandler(async (event) => {
     }
   }
 
-  const pool = new Pool()
+  const pool = new Pool({
+    ssl: {
+      mode: 'require'
+    }
+  })
   await pool.query('UPDATE "Appeals" SET admin_id = $2, status = \'in-work\' WHERE id = $1 AND status = \'new\'', [body.id, tokenInfo!.id])
 
   const appealSQL = await pool.query('SELECT id FROM "Appeals" WHERE id = $1 AND admin_id = $2', [body.id, tokenInfo!.id])

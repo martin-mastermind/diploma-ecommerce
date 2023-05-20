@@ -34,7 +34,11 @@ export default defineEventHandler(async (event) => {
     }
   }
 
-  const pool = new Pool()
+  const pool = new Pool({
+    ssl: {
+      mode: 'require'
+    }
+  })
   await pool.query(`
     UPDATE "User_Deliveries" SET city = $3, street = $4, house = $5, entrance = $6, floor = $7, apartment = $8, commentary = $9
     WHERE id = $1 AND user_id = $2

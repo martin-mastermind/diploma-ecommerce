@@ -38,7 +38,11 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  const pool = new Pool()
+  const pool = new Pool({
+    ssl: {
+      mode: 'require'
+    }
+  })
 
   await pool.query('INSERT INTO "Item_Reviews"(user_id, item_id, score, commentary) VALUES($1, $2, $3, $4)', [tokenInfo!.id, +id, +body.rating, body.message])
 

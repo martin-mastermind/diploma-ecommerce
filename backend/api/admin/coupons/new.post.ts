@@ -25,7 +25,11 @@ export default defineEventHandler(async (event) => {
     }
   }
 
-  const pool = new Pool()
+  const pool = new Pool({
+    ssl: {
+      mode: 'require'
+    }
+  })
   const couponSQL = await pool.query('INSERT INTO "Coupons"(title, code, use_amount, total_discount) VALUES ($1, $2, $3, $4) RETURNING id', [body.title, body.code, body.use_amount, body.total_discount])
 
   if (couponSQL.rows.length === 0) {

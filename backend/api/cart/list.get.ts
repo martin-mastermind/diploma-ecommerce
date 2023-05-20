@@ -25,7 +25,11 @@ export default defineEventHandler(async (event) => {
 
   try {
     const ids = JSON.parse(`${body.ids as string}`)
-    const pool = new Pool()
+    const pool = new Pool({
+      ssl: {
+        mode: 'require'
+      }
+    })
 
     const goodsSQL = await pool.query('SELECT id, title, img, price FROM "Items" WHERE id IN ($1)', [ids.join(', ')])
     await pool.end()

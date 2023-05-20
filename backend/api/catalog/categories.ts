@@ -2,7 +2,11 @@ import * as pg from 'pg'
 const { Pool } = pg.default
 
 export default defineEventHandler(async () => {
-  const pool = new Pool()
+  const pool = new Pool({
+    ssl: {
+      mode: 'require'
+    }
+  })
 
   const categoriesSQL = await pool.query('SELECT id, title FROM "Categories"')
 

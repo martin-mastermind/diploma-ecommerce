@@ -21,7 +21,11 @@ export default defineEventHandler(async (event) => {
   }
   setCookie(event, 'token', generateToken(getInfoFromToken(token!)!.id))
 
-  const pool = new Pool()
+  const pool = new Pool({
+    ssl: {
+      mode: 'require'
+    }
+  })
   await pool.query('DELETE FROM "Coupons" WHERE id = $1', [+id])
 
   await pool.end()

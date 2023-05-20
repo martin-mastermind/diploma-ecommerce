@@ -22,7 +22,11 @@ export default defineEventHandler(async (event) => {
 
   setCookie(event, 'token', clientGenerateToken(tokenInfo!.id))
 
-  const pool = new Pool()
+  const pool = new Pool({
+    ssl: {
+      mode: 'require'
+    }
+  })
   const appealSQL = await pool.query(`
     SELECT a.id, CONCAT(adm.last_name, ' ', adm.first_name, ' ', adm.patronymic) admin_name, a.status 
     FROM "Appeals" a

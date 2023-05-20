@@ -31,7 +31,11 @@ export default defineEventHandler(async (event) => {
 
   const hashedPassword = createHash('sha256').update(body.password).digest('hex')
 
-  const pool = new Pool()
+  const pool = new Pool({
+    ssl: {
+      mode: 'require'
+    }
+  })
 
   const hasChangedPassword = body.password.length >= 8
 

@@ -21,7 +21,11 @@ export default defineEventHandler(async (event) => {
   }
   setCookie(event, 'token', generateToken(getInfoFromToken(token!)!.id))
 
-  const pool = new Pool()
+  const pool = new Pool({
+    ssl: {
+      mode: 'require'
+    }
+  })
   const couponSQL = await pool.query('SELECT * FROM "Coupons" WHERE id = $1', [+id])
 
   if (couponSQL.rows.length === 0) {

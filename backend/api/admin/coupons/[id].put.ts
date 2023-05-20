@@ -33,7 +33,11 @@ export default defineEventHandler(async (event) => {
     }
   }
 
-  const pool = new Pool()
+  const pool = new Pool({
+    ssl: {
+      mode: 'require'
+    }
+  })
   await pool.query('UPDATE "Coupons" SET title = $2, code = $3, use_amount = $4, total_discount = $5 WHERE id = $1', [+id, body.title, body.code, body.use_amount, body.total_discount])
 
   await pool.query('DELETE FROM "Coupon_Rules" WHERE id NOT IN ($1)', [body.rules.map(r => r.id).join(', ')])

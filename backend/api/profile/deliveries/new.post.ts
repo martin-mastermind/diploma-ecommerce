@@ -26,7 +26,11 @@ export default defineEventHandler(async (event) => {
     }
   }
 
-  const pool = new Pool()
+  const pool = new Pool({
+    ssl: {
+      mode: 'require'
+    }
+  })
   await pool.query(`
     INSERT INTO "User_Deliveries"(user_id, city, street, house, entrance, floor, apartment, commentary)
     VALUES ($1, $2, $3, $4, $5, $6, $7, $8)

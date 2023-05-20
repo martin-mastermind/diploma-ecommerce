@@ -2,7 +2,11 @@ import * as pg from 'pg'
 const { Pool } = pg.default
 
 export default defineEventHandler(async () => {
-  const pool = new Pool()
+  const pool = new Pool({
+    ssl: {
+      mode: 'require'
+    }
+  })
 
   const goodsSQL = await pool.query(`
     SELECT i.id, title, img, price, COALESCE(ROUND(AVG(score), 2),0) total, COALESCE(COUNT(score),0) total_reviews 

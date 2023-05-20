@@ -22,7 +22,11 @@ export default defineEventHandler(async (event) => {
 
   setCookie(event, 'token', clientGenerateToken(tokenInfo!.id))
 
-  const pool = new Pool()
+  const pool = new Pool({
+    ssl: {
+      mode: 'require'
+    }
+  })
   await pool.query('UPDATE "Orders" SET status = \'canceled\' WHERE user_id = $1 AND id = $2 AND status = \'new\' ', [tokenInfo!.id, +id])
   await pool.end()
 

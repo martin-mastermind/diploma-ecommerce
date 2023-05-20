@@ -25,7 +25,11 @@ export default defineEventHandler(async (event) => {
     }
   }
 
-  const pool = new Pool()
+  const pool = new Pool({
+    ssl: {
+      mode: 'require'
+    }
+  })
   await pool.query('INSERT INTO "Categories"(title, parent_category_id) VALUES ($1, $2)', [body.title, body.parent_category_id])
 
   await pool.end()

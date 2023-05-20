@@ -33,7 +33,11 @@ export default defineEventHandler(async (event) => {
     }
   }
 
-  const pool = new Pool()
+  const pool = new Pool({
+    ssl: {
+      mode: 'require'
+    }
+  })
   const orderSQL = await pool.query('SELECT status FROM "Orders" WHERE id = $1 AND status <> \'canceled\'', [+id])
 
   if (orderSQL.rows.length === 0) {

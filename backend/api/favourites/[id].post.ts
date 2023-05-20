@@ -22,7 +22,11 @@ export default defineEventHandler(async (event) => {
 
   setCookie(event, 'token', clientGenerateToken(tokenInfo!.id))
 
-  const pool = new Pool()
+  const pool = new Pool({
+    ssl: {
+      mode: 'require'
+    }
+  })
 
   const favouriteSQL = await pool.query('SELECT id FROM "User_Favourite_Items" WHERE user_id = $1 AND item_id = $2', [tokenInfo!.id, +id])
   if (favouriteSQL.rows.length === 0) {

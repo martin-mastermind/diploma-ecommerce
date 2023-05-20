@@ -24,7 +24,11 @@ export default defineEventHandler(async (event) => {
   const tokenInfo = getInfoFromToken(token!)
   setCookie(event, 'token', generateToken(tokenInfo!.id))
 
-  const pool = new Pool()
+  const pool = new Pool({
+    ssl: {
+      mode: 'require'
+    }
+  })
   await pool.query('UPDATE "Appeals" SET status = \'closed\' WHERE id = $1 AND admin_id = $2', [+id, tokenInfo!.id])
   await pool.end()
 

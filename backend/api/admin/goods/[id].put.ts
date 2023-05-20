@@ -33,7 +33,11 @@ export default defineEventHandler(async (event) => {
     }
   }
 
-  const pool = new Pool()
+  const pool = new Pool({
+    ssl: {
+      mode: 'require'
+    }
+  })
   await pool.query(`
     UPDATE "Items" 
     SET title = $2, category_id = $3, vendor_code = $4, img = $5, origin_country = $6, description = $7, characteristic = $8, weight = $9, price = $10, amount = $11

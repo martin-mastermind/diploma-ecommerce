@@ -33,7 +33,11 @@ export default defineEventHandler(async (event) => {
     }
   }
 
-  const pool = new Pool()
+  const pool = new Pool({
+    ssl: {
+      mode: 'require'
+    }
+  })
   await pool.query('UPDATE "Categories" SET title = $2, parent_category_id = $3 WHERE id = $1', [+id, body.title, body.parent_category_id])
 
   await pool.end()

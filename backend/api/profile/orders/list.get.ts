@@ -14,7 +14,11 @@ export default defineEventHandler(async (event) => {
 
   setCookie(event, 'token', clientGenerateToken(tokenInfo!.id))
 
-  const pool = new Pool()
+  const pool = new Pool({
+    ssl: {
+      mode: 'require'
+    }
+  })
   const ordersSQL = await pool.query('SELECT id, delivery_date, delivery_from_time, delivery_to_time, status FROM "Orders" WHERE user_id = $1 ORDER BY id DESC', [tokenInfo!.id])
 
   const orders = []
