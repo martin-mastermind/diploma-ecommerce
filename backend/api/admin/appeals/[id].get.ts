@@ -56,6 +56,11 @@ export default defineEventHandler(async (event) => {
       phone: appeal.user_phone,
       email: appeal.user_email
     },
-    messages: messagesSQL.rows
+    messages: messagesSQL.rows.map((m: AppealMessage) => {
+      return {
+        ...m,
+        sent_time: new Date(m.sent_time).toLocaleString()
+      }
+    })
   }
 })

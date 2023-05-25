@@ -48,6 +48,14 @@ export default defineEventHandler(async (event) => {
 
   return {
     ...appeal,
-    messages: messagesSQL.rows
+    admin: {
+      name: appeal.admin_name
+    },
+    messages: messagesSQL.rows.map((m: AppealMessage) => {
+      return {
+        ...m,
+        sent_time: new Date(m.sent_time).toLocaleString()
+      }
+    })
   }
 })
