@@ -2,11 +2,11 @@
 import { useReviews } from '~/composables/client/useReviews'
 import { useUser } from '~/store/client/user'
 
-const starReviews = computed(() => (star: number) => props.rating.reviews!.filter(r => r.rating === star).length)
-
 const props = defineProps<{
   rating: Client.GoodRating
 }>()
+
+const starReviews = computed(() => (star: number) => props.rating.reviews!.filter(r => +r.rating === star).length)
 
 const { verifyUser } = useUser()
 
